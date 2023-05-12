@@ -1,8 +1,9 @@
-# This workflow check instructions in articles
+# This is a basic workflow that is manually triggered
 
-name: Stats workflow
+name: Manual workflow
 
-# Controls when the action will run. 
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
 on:
   # Triggers the workflow on the 19th every month
   schedule:
@@ -11,36 +12,43 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # Generate report of outdated articles
-  report:
+  # This workflow contains a single job called "greet"
+  update_stats:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Check out repo and the whole history
+      # Check out current repo
       - name: Check out repository code
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-
-      # Report outdated files, store result as artifact and updates stats
-      - name: Generate stat report
-        run: |
-           pip install -r tools/requirements.txt
-           python3 tools/maintenance.py -q
-
-      # Commit stats
-      - name: Commit stats
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add content/stats/*_data.json
-          git pull
-          git commit -m "Update stats"
           
-      # Push stats
-      - name: Push stats
-        uses: ad-m/github-push-action@master
+      # Runs a single command using the runners shell
+      - name: Show Token
+        run: |
+             echo "${{ secrets.GITHUB_TOKEN }}"
+             
+      #- name: Setup tmate session
+      #  uses: mxschmitt/action-tmate@v3
+             
+             
+      # Test GitHub API issues
+      - name: Test GitHUB API
+        run: | 
+              curl -L \
+                -H "Accept: application/vnd.github+json" \
+                -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"\
+                -H "X-GitHub-Api-Version: 2022-11-28" \
+                https://api.github.com/issues  
+                
+      # Run python script to update files
+      #- name: Run Python script to update files
+      #  run: |
+      #       cd tools/
+      #       pip install -r requirements.txt
+      #       python3 stats_data_generate.py
