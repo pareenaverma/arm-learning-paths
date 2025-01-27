@@ -10,7 +10,7 @@ on:
 
 jobs:
   check_content:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
 
     steps:
       - name: Checkout
@@ -32,7 +32,7 @@ jobs:
 
       - name: Check HTML links
         continue-on-error: true
-        run: bin/htmltest -c .htmltest.yml -s 2>&1 | tee htmltest.log
+        run: bin/htmltest.aarch64 -c .htmltest.yml -s 2>&1 | tee htmltest.log
 
       - name: HTML test results
         uses: actions/upload-artifact@v4
