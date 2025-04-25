@@ -210,14 +210,18 @@ def check_terminology(text, line_num, file_path):
     
     for term, correct_form in style_rules[4]["terms"].items():
         pattern = r"\b" + re.escape(term) + r"\b"
-        if re.search(pattern, text, re.IGNORECASE) and not re.search(pattern, text):
-            suggestions.append({
-                "file": file_path,
-                "line": line_num,
-                "original": re.search(pattern, text, re.IGNORECASE).group(0),
-                "suggested": correct_form,
-                "reason": f"Use consistent terminology: '{correct_form}' instead of '{term}'."
-            })
+        match = re.search(pattern, text, re.IGNORECASE)
+        if match:
+            found_text = match.group(0)
+            # Only suggest if the found text doesn't already match the correct form
+            if found_text != correct_form:
+                suggestions.append({
+                    "file": file_path,
+                    "line": line_num,
+                    "original": found_text,
+                    "suggested": correct_form,
+                    "reason": f"Use consistent terminology: '{correct_form}' instead of '{found_text}'."
+                })
     
     return suggestions
 
