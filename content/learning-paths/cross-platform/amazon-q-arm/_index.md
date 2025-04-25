@@ -1,7 +1,7 @@
 ---
 title: Using Amazon Q for Arm Development
 
-use
+description: Learn how to leverage Amazon Q to accelerate your Arm-based software development workflow.
 
 minutes_to_complete: 30
 
