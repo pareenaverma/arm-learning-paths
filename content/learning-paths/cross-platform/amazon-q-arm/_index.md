@@ -10,7 +10,7 @@ who_is_this_for: Software developers working with Arm architecture who want to i
 learning_objectives: 
     - Understand how Amazon Q can assist with Arm development tasks
     - Set up Amazon Q for your Arm development environment
-improve
+    - Use Amazon Q to optimize code for Arm architecture
     - Troubleshoot common Arm development issues with Amazon Q
 
 prerequisites:
