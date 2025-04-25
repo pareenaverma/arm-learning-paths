@@ -69,25 +69,35 @@ jobs:
             
             const prNumber = process.env.PR_NUMBER || '${{ github.event.inputs.pr_number }}';
             
+            // Add sleep function to add delay between API calls
+            const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+            
             for (const suggestion of suggestions) {
               const { file, line, original, suggested, reason } = suggestion;
               
               try {
+                // Get PR data to ensure we have the correct commit SHA
+                const { data: pr } = await github.rest.pulls.get({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: parseInt(prNumber)
+                });
+                const headSha = pr.head.sha;
+                
                 await github.rest.pulls.createReviewComment({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   pull_number: parseInt(prNumber),
-                  commit_id: context.payload.pull_request?.head.sha || (await github.rest.pulls.get({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    pull_number: parseInt(prNumber)
-                  })).data.head.sha,
+                  commit_id: headSha,
                   path: file,
                   body: `**Style Guide Suggestion:**\n\nReason: ${reason}\n\n\`\`\`suggestion ${suggested}\`\`\``,
                   line: line,
                   side: 'RIGHT'
                 });
                 console.log(`Created suggestion for ${file}:${line}`);
+                
+                // Add a delay of 2 seconds between comments to avoid rate limiting
+                await sleep(2000);
               } catch (error) {
                 console.error(`Error creating comment for ${file}:${line}: ${error.message}`);
               }
