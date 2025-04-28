@@ -1,0 +1,147 @@
+#!/usr/bin/env python3
+"""
+Enhanced style checker for Arm Learning Paths content.
+This script checks markdown files against writing style guidelines from a JSON file
+and provides replacement suggestions.
+"""
+
+import argparse
+import json
+import os
+import re
+import sys
+from pathlib import Path
+
+def load_style_rules(rules_file):
+    """Load style rules from a JSON file."""
+    try:
+        with open(rules_file, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"Error loading style rules: {e}")
+        return []
+
+def is_in_code_block(lines, line_index):
+    """Check if the line is within a code block."""
+    code_block_count = 0
+    for i in range(line_index):
+        if re.match(r'^```', lines[i]):
+            code_block_count += 1
+    
+    return code_block_count % 2 == 1  # Odd count means inside a code block
+
+def check_style(content, file_path, style_rules):
+    """Check content against style rules and return suggestions."""
+    suggestions = []
+    lines = content.split("\n")
+    
+    for i, line in enumerate(lines):
+        for rule in style_rules:
+            matches = re.finditer(rule["pattern"], line, re.IGNORECASE)
+            for match in matches:
+                # Skip code blocks
+                if is_in_code_block(lines, i):
+                    continue
+                
+                # Create a suggestion
+                original = line
+                suggested = re.sub(rule["pattern"], rule["replacement"], line, flags=re.IGNORECASE)
+                
+                if original != suggested:
+                    suggestions.append({
+                        "file": file_path,
+                        "line": i + 1,
+                        "original": original,
+                        "suggested": suggested,
+                        "reason": rule["reason"],
+                    })
+                    # Only one suggestion per line to avoid conflicts
+                    break
+    
+    return suggestions
+
+def save_suggestions_to_file(suggestions, output_file="style_suggestions.json"):
+    """Save suggestions to a JSON file."""
+    with open(output_file, "w") as f:
+        json.dump(suggestions, f, indent=2)
+    print(f"Saved suggestions to {output_file}")
+
+def print_suggestions(suggestions):
+    """Print suggestions in a readable format."""
+    if not suggestions:
+        print("No style issues found.")
+        return
+    
+    print(f"\nFound {len(suggestions)} style issues:")
+    print("=" * 80)
+    
+    for i, sugg in enumerate(suggestions, 1):
+        print(f"Issue {i}:")
+        print(f"File: {sugg['file']}")
+        print(f"Line: {sugg['line']}")
+        print(f"Reason: {sugg['reason']}")
+        print(f"Original: {sugg['original']}")
+        print(f"Suggested: {sugg['suggested']}")
+        print("-" * 80)
+
+def main():
+    parser = argparse.ArgumentParser(description="Check markdown files for style issues")
+    parser.add_argument("--file", help="Path to a specific markdown file to check")
+    parser.add_argument("--dir", help="Directory containing markdown files to check")
+    parser.add_argument("--rules", default="tools/style_rules.json", help="JSON file containing style rules")
+    parser.add_argument("--output", default="style_suggestions.json", help="Output file for suggestions")
+    args = parser.parse_args()
+    
+    if not args.file and not args.dir:
+        print("Error: Please provide either --file or --dir argument")
+        sys.exit(1)
+    
+    # Load style rules
+    style_rules = load_style_rules(args.rules)
+    if not style_rules:
+        print("Error: No style rules loaded. Check the rules file.")
+        sys.exit(1)
+    
+    print(f"Loaded {len(style_rules)} style rules from {args.rules}")
+    
+    all_suggestions = []
+    
+    # Check a specific file
+    if args.file:
+        if not os.path.isfile(args.file):
+            print(f"Error: File not found: {args.file}")
+            sys.exit(1)
+        
+        if not args.file.endswith((".md", ".mdx")):
+            print(f"Warning: {args.file} is not a markdown file. Checking anyway.")
+        
+        with open(args.file, "r", encoding="utf-8") as f:
+            content = f.read()
+        
+        suggestions = check_style(content, args.file, style_rules)
+        all_suggestions.extend(suggestions)
+        print(f"Checked {args.file}: Found {len(suggestions)} style issues")
+    
+    # Check all markdown files in a directory
+    if args.dir:
+        if not os.path.isdir(args.dir):
+            print(f"Error: Directory not found: {args.dir}")
+            sys.exit(1)
+        
+        for root, _, files in os.walk(args.dir):
+            for file in files:
+                if file.endswith((".md", ".mdx")):
+                    file_path = os.path.join(root, file)
+                    with open(file_path, "r", encoding="utf-8") as f:
+                        content = f.read()
+                    
+                    suggestions = check_style(content, file_path, style_rules)
+                    all_suggestions.extend(suggestions)
+                    print(f"Checked {file_path}: Found {len(suggestions)} style issues")
+    
+    # Print and save suggestions
+    print_suggestions(all_suggestions)
+    save_suggestions_to_file(all_suggestions, args.output)
+
+if __name__ == "__main__":
+    main()

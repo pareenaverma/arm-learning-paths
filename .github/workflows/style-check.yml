@@ -1,0 +1,146 @@
+name: Style Check
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'Pull Request Number'
+        required: true
+        type: string
+
+jobs:
+  style-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Fetch PR details
+        id: pr-details
+        run: |
+          PR_NUMBER=${{ github.event.inputs.pr_number }}
+          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
+          
+          # Get the PR details using GitHub API
+          PR_DATA=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls/$PR_NUMBER")
+          
+          HEAD_SHA=$(echo "$PR_DATA" | jq -r .head.sha)
+          HEAD_REF=$(echo "$PR_DATA" | jq -r .head.ref)
+          BASE_SHA=$(echo "$PR_DATA" | jq -r .base.sha)
+          
+          echo "HEAD_SHA=$HEAD_SHA" >> $GITHUB_ENV
+          echo "HEAD_REF=$HEAD_REF" >> $GITHUB_ENV
+          echo "BASE_SHA=$BASE_SHA" >> $GITHUB_ENV
+          
+      - name: Get changed files
+        id: changed-files
+        run: |
+          # Get the list of files changed in the PR
+          FILES=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls/${{ env.PR_NUMBER }}/files" | \
+            jq -r '.[] | select(.filename | endswith(".md") or endswith(".mdx")) | .filename')
+          
+          echo "Changed markdown files:"
+          echo "$FILES"
+          echo "FILES<<EOF" >> $GITHUB_ENV
+          echo "$FILES" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          
+      - name: Check style and create suggestions
+        run: |
+          # Create a directory for storing file contents
+          mkdir -p temp_files
+          
+          # Process each changed file
+          echo "$FILES" | while read -r file; do
+            if [ -z "$file" ]; then
+              continue
+            fi
+            
+            echo "Processing $file"
+            
+            # Get file content from the PR head
+            curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              "https://api.github.com/repos/${{ github.repository }}/contents/$file?ref=${{ env.HEAD_REF }}" | \
+              jq -r '.content' | base64 --decode > "temp_files/$(basename "$file")"
+            
+            # Run style check on the file
+            python3 tools/enhanced_style_check.py --file "temp_files/$(basename "$file")" --output "temp_files/$(basename "$file").json"
+          done
+          
+          # Combine all suggestions
+          echo "[]" > all_suggestions.json
+          for json_file in temp_files/*.json; do
+            if [ -f "$json_file" ]; then
+              # Merge JSON files
+              jq -s '.[0] + .[1]' all_suggestions.json "$json_file" > temp.json
+              mv temp.json all_suggestions.json
+            fi
+          done
+          
+          # Create review comments
+          python3 - <<EOF
+          import json
+          import requests
+          import os
+          
+          # Load suggestions
+          with open('all_suggestions.json', 'r') as f:
+              suggestions = json.load(f)
+          
+          if not suggestions:
+              print("No style issues found.")
+              exit(0)
+          
+          # Group suggestions by file
+          file_suggestions = {}
+          for sugg in suggestions:
+              file_path = sugg["file"].replace('temp_files/', '')
+              if file_path not in file_suggestions:
+                  file_suggestions[file_path] = []
+              file_suggestions[file_path].append(sugg)
+          
+          # Create review comments
+          review_comments = []
+          for file_path, file_suggs in file_suggestions.items():
+              for sugg in file_suggs:
+                  comment = {
+                      "path": file_path,
+                      "line": sugg["line"],
+                      "body": f"**Style suggestion**: {sugg['reason']}\n\n```suggestion\n{sugg['suggested']}\n```"
+                  }
+                  review_comments.append(comment)
+          
+          # Submit the review
+          if review_comments:
+              url = f"https://api.github.com/repos/${{ github.repository }}/pulls/${{ env.PR_NUMBER }}/reviews"
+              headers = {"Authorization": f"token ${{ secrets.GITHUB_TOKEN }}"}
+              data = {
+                  "commit_id": "${{ env.HEAD_SHA }}",
+                  "body": "## Style Check Results\n\nI found some style issues that could be improved based on our writing guidelines.",
+                  "event": "COMMENT",
+                  "comments": review_comments
+              }
+              
+              response = requests.post(url, headers=headers, json=data)
+              if response.status_code >= 400:
+                  print(f"Error creating review: {response.status_code}")
+                  print(response.text)
+              else:
+                  print(f"Created {len(review_comments)} style suggestions.")
+          else:
+              print("No style issues found.")
+          EOF

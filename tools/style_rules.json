@@ -1,0 +1,52 @@
+[
+  {
+    "pattern": "\\b(?:utilize|utilization|utilizes|utilizing)\\b",
+    "replacement": "use",
+    "reason": "Use 'use' instead of 'utilize' for simplicity."
+  },
+  {
+    "pattern": "\\b(?:optimize|optimization|optimizes|optimizing)\\b",
+    "replacement": "improve",
+    "reason": "Simplify language by replacing 'optimize' with 'improve'."
+  },
+  {
+    "pattern": "\\bin order to\\b",
+    "replacement": "to",
+    "reason": "Use 'to' instead of 'in order to' for conciseness."
+  },
+  {
+    "pattern": "\\bplease note that\\b",
+    "replacement": "",
+    "reason": "Remove 'please note that' for directness."
+  },
+  {
+    "pattern": "\\bthe data (?:is|was) processed\\b",
+    "replacement": "processed the data",
+    "reason": "Use active voice instead of passive voice."
+  },
+  {
+    "pattern": "\\byou should\\b",
+    "replacement": "",
+    "reason": "Be direct with instructions, avoid 'you should'."
+  },
+  {
+    "pattern": "\\bis able to\\b",
+    "replacement": "can",
+    "reason": "Use 'can' instead of 'is able to' for simplicity."
+  },
+  {
+    "pattern": "\\bdue to the fact that\\b",
+    "replacement": "because",
+    "reason": "Use 'because' instead of 'due to the fact that' for conciseness."
+  },
+  {
+    "pattern": "\\bat this point in time\\b",
+    "replacement": "now",
+    "reason": "Use 'now' instead of 'at this point in time' for conciseness."
+  },
+  {
+    "pattern": "\\bfor the purpose of\\b",
+    "replacement": "for",
+    "reason": "Use 'for' instead of 'for the purpose of' for conciseness."
+  }
+]
