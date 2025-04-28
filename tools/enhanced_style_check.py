@@ -2,7 +2,7 @@
 """
 Enhanced style checker for Arm Learning Paths content.
 This script checks markdown files against writing style guidelines from a JSON file
-and provides replacement suggestions.
+and provides replacement suggestions with proper tense handling.
 """
 
 import argparse
@@ -30,19 +30,40 @@ def is_in_code_block(lines, line_index):
     
     return code_block_count % 2 == 1  # Odd count means inside a code block
 
+def is_in_yaml_frontmatter(lines, line_index):
+    """Check if the line is within YAML frontmatter."""
+    if line_index == 0 and lines[0].strip() == '---':
+        return True
+        
+    frontmatter_markers = 0
+    for i in range(line_index):
+        if lines[i].strip() == '---':
+            frontmatter_markers += 1
+    
+    # If we've seen an odd number of markers, we're in frontmatter
+    return frontmatter_markers % 2 == 1
+
 def check_style(content, file_path, style_rules):
     """Check content against style rules and return suggestions."""
     suggestions = []
     lines = content.split("\n")
     
     for i, line in enumerate(lines):
+        # Skip code blocks and YAML frontmatter
+        if is_in_code_block(lines, i) or is_in_yaml_frontmatter(lines, i):
+            continue
+            
+        # Skip headings (lines starting with #)
+        if re.match(r'^#+\s', line):
+            continue
+            
+        # Skip links and image references
+        if re.search(r'^\s*\[.*\]:\s*', line):
+            continue
+            
         for rule in style_rules:
             matches = re.finditer(rule["pattern"], line, re.IGNORECASE)
             for match in matches:
-                # Skip code blocks
-                if is_in_code_block(lines, i):
-                    continue
-                
                 # Create a suggestion
                 original = line
                 suggested = re.sub(rule["pattern"], rule["replacement"], line, flags=re.IGNORECASE)

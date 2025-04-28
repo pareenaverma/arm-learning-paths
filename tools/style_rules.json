@@ -1,13 +1,58 @@
 [
   {
-    "pattern": "\\b(?:utilize|utilization|utilizes|utilizing)\\b",
+    "pattern": "\\butilize\\b",
     "replacement": "use",
     "reason": "Use 'use' instead of 'utilize' for simplicity."
   },
   {
-    "pattern": "\\b(?:optimize|optimization|optimizes|optimizing)\\b",
+    "pattern": "\\butilizes\\b",
+    "replacement": "uses",
+    "reason": "Use 'uses' instead of 'utilizes' for simplicity."
+  },
+  {
+    "pattern": "\\butilized\\b",
+    "replacement": "used",
+    "reason": "Use 'used' instead of 'utilized' for simplicity."
+  },
+  {
+    "pattern": "\\butilizing\\b",
+    "replacement": "using",
+    "reason": "Use 'using' instead of 'utilizing' for simplicity."
+  },
+  {
+    "pattern": "\\butilization\\b",
+    "replacement": "use",
+    "reason": "Use 'use' instead of 'utilization' for simplicity."
+  },
+  {
+    "pattern": "\\boptimize\\b",
     "replacement": "improve",
     "reason": "Simplify language by replacing 'optimize' with 'improve'."
+  },
+  {
+    "pattern": "\\boptimizes\\b",
+    "replacement": "improves",
+    "reason": "Simplify language by replacing 'optimizes' with 'improves'."
+  },
+  {
+    "pattern": "\\boptimized\\b",
+    "replacement": "improved",
+    "reason": "Simplify language by replacing 'optimized' with 'improved'."
+  },
+  {
+    "pattern": "\\boptimizing\\b",
+    "replacement": "improving",
+    "reason": "Simplify language by replacing 'optimizing' with 'improving'."
+  },
+  {
+    "pattern": "\\boptimization\\b",
+    "replacement": "improvement",
+    "reason": "Simplify language by replacing 'optimization' with 'improvement'."
+  },
+  {
+    "pattern": "\\boptimizations\\b",
+    "replacement": "improvements",
+    "reason": "Simplify language by replacing 'optimizations' with 'improvements'."
   },
   {
     "pattern": "\\bin order to\\b",
@@ -35,6 +80,21 @@
     "reason": "Use 'can' instead of 'is able to' for simplicity."
   },
   {
+    "pattern": "\\bare able to\\b",
+    "replacement": "can",
+    "reason": "Use 'can' instead of 'are able to' for simplicity."
+  },
+  {
+    "pattern": "\\bwas able to\\b",
+    "replacement": "could",
+    "reason": "Use 'could' instead of 'was able to' for simplicity."
+  },
+  {
+    "pattern": "\\bwere able to\\b",
+    "replacement": "could",
+    "reason": "Use 'could' instead of 'were able to' for simplicity."
+  },
+  {
     "pattern": "\\bdue to the fact that\\b",
     "replacement": "because",
     "reason": "Use 'because' instead of 'due to the fact that' for conciseness."
@@ -48,5 +108,40 @@
     "pattern": "\\bfor the purpose of\\b",
     "replacement": "for",
     "reason": "Use 'for' instead of 'for the purpose of' for conciseness."
+  },
+  {
+    "pattern": "\\bprior to\\b",
+    "replacement": "before",
+    "reason": "Use 'before' instead of 'prior to' for simplicity."
+  },
+  {
+    "pattern": "\\bsubsequent to\\b",
+    "replacement": "after",
+    "reason": "Use 'after' instead of 'subsequent to' for simplicity."
+  },
+  {
+    "pattern": "\\ba large number of\\b",
+    "replacement": "many",
+    "reason": "Use 'many' instead of 'a large number of' for conciseness."
+  },
+  {
+    "pattern": "\\ba majority of\\b",
+    "replacement": "most",
+    "reason": "Use 'most' instead of 'a majority of' for conciseness."
+  },
+  {
+    "pattern": "\\bin spite of\\b",
+    "replacement": "despite",
+    "reason": "Use 'despite' instead of 'in spite of' for conciseness."
+  },
+  {
+    "pattern": "\\bwith regard to\\b",
+    "replacement": "about",
+    "reason": "Use 'about' instead of 'with regard to' for conciseness."
+  },
+  {
+    "pattern": "\\bwith respect to\\b",
+    "replacement": "about",
+    "reason": "Use 'about' instead of 'with respect to' for conciseness."
   }
 ]
