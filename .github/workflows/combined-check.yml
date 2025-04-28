@@ -92,19 +92,26 @@ jobs:
             python3 tools/grammar_check.py --file "temp_files/$(basename "$file")" --output "temp_files/$(basename "$file").grammar.json"
             
             # Combine results
-            python3 - <<EOL
+            python3 - << 'PYTHON_EOF'
 import json
 import os
+import sys
+
+# Get the filename from environment
+filename = os.environ.get('CURRENT_FILE')
+if not filename:
+    print("Error: No filename provided")
+    sys.exit(1)
 
 # Load style suggestions
-style_file = "temp_files/$(basename "$file").style.json"
+style_file = f"temp_files/{os.path.basename(filename)}.style.json"
 style_suggestions = []
 if os.path.exists(style_file):
     with open(style_file, "r") as f:
         style_suggestions = json.load(f)
 
 # Load grammar suggestions
-grammar_file = "temp_files/$(basename "$file").grammar.json"
+grammar_file = f"temp_files/{os.path.basename(filename)}.grammar.json"
 grammar_suggestions = []
 if os.path.exists(grammar_file):
     with open(grammar_file, "r") as f:
@@ -117,11 +124,13 @@ combined_suggestions = style_suggestions + grammar_suggestions
 combined_suggestions.sort(key=lambda x: x["line"])
 
 # Save combined suggestions
-with open("temp_files/$(basename "$file").combined.json", "w") as f:
+output_file = f"temp_files/{os.path.basename(filename)}.combined.json"
+with open(output_file, "w") as f:
     json.dump(combined_suggestions, f, indent=2)
 
 print(f"Combined {len(style_suggestions)} style suggestions and {len(grammar_suggestions)} grammar suggestions.")
-EOL
+PYTHON_EOF
+            CURRENT_FILE="$file"
           done
           
           # Combine all suggestions
