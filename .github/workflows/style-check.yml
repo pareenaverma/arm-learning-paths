@@ -1,5 +1,9 @@
 name: Style Check
 
+permissions:
+  contents: read
+  pull-requests: write
+
 on:
   workflow_dispatch:
     inputs:
@@ -91,11 +95,12 @@ jobs:
             fi
           done
           
-          # Create review comments
-          python3 - <<EOF
+          # Create review comments using a separate Python script to avoid shell escaping issues
+          cat > create_review.py << 'EOL'
           import json
           import requests
           import os
+          import sys
           
           # Load suggestions
           with open('all_suggestions.json', 'r') as f:
@@ -103,7 +108,7 @@ jobs:
           
           if not suggestions:
               print("No style issues found.")
-              exit(0)
+              sys.exit(0)
           
           # Group suggestions by file
           file_suggestions = {}
@@ -126,10 +131,15 @@ jobs:
           
           # Submit the review
           if review_comments:
-              url = f"https://api.github.com/repos/${{ github.repository }}/pulls/${{ env.PR_NUMBER }}/reviews"
-              headers = {"Authorization": f"token ${{ secrets.GITHUB_TOKEN }}"}
+              pr_number = os.environ.get('PR_NUMBER')
+              repo = os.environ.get('GITHUB_REPOSITORY')
+              head_sha = os.environ.get('HEAD_SHA')
+              github_token = os.environ.get('GITHUB_TOKEN')
+              
+              url = f"https://api.github.com/repos/{repo}/pulls/{pr_number}/reviews"
+              headers = {"Authorization": f"token {github_token}"}
               data = {
-                  "commit_id": "${{ env.HEAD_SHA }}",
+                  "commit_id": head_sha,
                   "body": "## Style Check Results\n\nI found some style issues that could be improved based on our writing guidelines.",
                   "event": "COMMENT",
                   "comments": review_comments
@@ -143,4 +153,7 @@ jobs:
                   print(f"Created {len(review_comments)} style suggestions.")
           else:
               print("No style issues found.")
-          EOF
+          EOL
+          
+          # Run the Python script with environment variables
+          GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} python3 create_review.py
