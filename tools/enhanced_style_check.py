@@ -64,6 +64,15 @@ def is_in_yaml_frontmatter(lines, line_index):
     # If we've seen an odd number of markers, we're in frontmatter
     return frontmatter_markers % 2 == 1
 
+def capitalize_if_at_start(original, replacement, match):
+    """Capitalize the replacement if it's at the start of a sentence."""
+    # Check if the match is at the start of the string or after a period and space
+    start_of_sentence = match.start() == 0 or (match.start() > 1 and original[match.start()-2:match.start()] == '. ')
+    
+    if start_of_sentence and replacement and replacement[0].islower():
+        return replacement[0].upper() + replacement[1:]
+    return replacement
+
 def detect_passive_voice_with_spacy(text):
     """
     Detect passive voice using spaCy's dependency parsing.
@@ -107,6 +116,10 @@ def detect_passive_voice_with_spacy(text):
                 
                 # Create active voice suggestion
                 active_suggestion = f"{agent.text} {verb.lemma_} {subject.text}"
+                
+                # Capitalize if at start of sentence
+                if passive_span.start == 0 or (passive_span.start > 1 and doc[passive_span.start-2].text == '.'):
+                    active_suggestion = active_suggestion[0].upper() + active_suggestion[1:]
                 
                 passive_constructions.append((passive_span.text, active_suggestion))
     
@@ -249,11 +262,22 @@ def check_style(content, file_path, style_rules):
             
         # Check against other style rules
         for rule in style_rules:
-            matches = re.finditer(rule["pattern"], line, re.IGNORECASE)
+            matches = list(re.finditer(rule["pattern"], line, re.IGNORECASE))
             for match in matches:
                 # Create a suggestion
                 original = line
-                suggested = re.sub(rule["pattern"], rule["replacement"], line, flags=re.IGNORECASE)
+                
+                # Get the matched text
+                matched_text = match.group(0)
+                
+                # Determine if replacement should be capitalized
+                replacement = rule["replacement"]
+                if match.start() == 0 or (match.start() >= 2 and line[match.start()-2:match.start()] == '. '):
+                    if replacement and replacement[0].islower():
+                        replacement = replacement[0].upper() + replacement[1:]
+                
+                # Apply the replacement
+                suggested = line[:match.start()] + replacement + line[match.end():]
                 
                 if original != suggested:
                     suggestions.append({
