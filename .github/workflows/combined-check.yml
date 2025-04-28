@@ -72,6 +72,10 @@ jobs:
           # Create a directory for storing file contents
           mkdir -p temp_files
           
+          # Initialize counters
+          TOTAL_STYLE_ISSUES=0
+          TOTAL_GRAMMAR_ISSUES=0
+          
           # Process each changed file
           echo "$FILES" | while read -r file; do
             if [ -z "$file" ]; then
@@ -86,27 +90,60 @@ jobs:
               jq -r '.content' | base64 --decode > "temp_files/$(basename "$file")"
             
             # Run style check
+            echo "Running style check on $file"
             python3 tools/enhanced_style_check.py --file "temp_files/$(basename "$file")" --output "temp_files/$(basename "$file").style.json"
             
             # Run grammar check
+            echo "Running grammar check on $file"
             python3 tools/grammar_check.py --file "temp_files/$(basename "$file")" --output "temp_files/$(basename "$file").grammar.json"
             
             # Combine results using the separate Python script
+            echo "Combining results for $file"
             python3 tools/combine_results.py \
               "temp_files/$(basename "$file").style.json" \
               "temp_files/$(basename "$file").grammar.json" \
               "temp_files/$(basename "$file").combined.json"
+              
+            # Debug: Check the content of the combined file
+            echo "Content of combined suggestions file for $file:"
+            cat "temp_files/$(basename "$file").combined.json"
+            
+            # Count issues
+            if [ -f "temp_files/$(basename "$file").style.json" ]; then
+              FILE_STYLE_ISSUES=$(jq 'length' "temp_files/$(basename "$file").style.json")
+              TOTAL_STYLE_ISSUES=$((TOTAL_STYLE_ISSUES + FILE_STYLE_ISSUES))
+              echo "Found $FILE_STYLE_ISSUES style issues in $file"
+            fi
+            
+            if [ -f "temp_files/$(basename "$file").grammar.json" ]; then
+              FILE_GRAMMAR_ISSUES=$(jq 'length' "temp_files/$(basename "$file").grammar.json")
+              TOTAL_GRAMMAR_ISSUES=$((TOTAL_GRAMMAR_ISSUES + FILE_GRAMMAR_ISSUES))
+              echo "Found $FILE_GRAMMAR_ISSUES grammar issues in $file"
+            fi
           done
+          
+          # Export the counters for use in later steps
+          echo "TOTAL_STYLE_ISSUES=$TOTAL_STYLE_ISSUES" >> $GITHUB_ENV
+          echo "TOTAL_GRAMMAR_ISSUES=$TOTAL_GRAMMAR_ISSUES" >> $GITHUB_ENV
           
           # Combine all suggestions
           echo "[]" > all_suggestions.json
           for json_file in temp_files/*.combined.json; do
             if [ -f "$json_file" ]; then
+              # Debug: Check the content of each combined file
+              echo "Merging $json_file into all_suggestions.json"
+              echo "Content of $json_file:"
+              cat "$json_file"
+              
               # Merge JSON files
               jq -s '.[0] + .[1]' all_suggestions.json "$json_file" > temp.json
               mv temp.json all_suggestions.json
             fi
           done
+          
+          # Debug: Check the final combined suggestions
+          echo "Final combined suggestions:"
+          cat all_suggestions.json
           
           # Create individual comments for each suggestion
           cat > create_comments.py << 'EOL'
@@ -127,8 +164,14 @@ jobs:
               file_paths[basename] = file_data['filename']
           
           # Load combined suggestions
-          with open('all_suggestions.json', 'r') as f:
-              suggestions = json.load(f)
+          print("Loading suggestions from all_suggestions.json")
+          try:
+              with open('all_suggestions.json', 'r') as f:
+                  suggestions = json.load(f)
+              print(f"Loaded {len(suggestions)} suggestions")
+          except Exception as e:
+              print(f"Error loading suggestions: {e}")
+              suggestions = []
           
           if not suggestions:
               print("No issues found.")
@@ -183,6 +226,12 @@ jobs:
               # Add a small delay to avoid rate limiting
               time.sleep(1)
           
+          # Write counts to environment
+          with open(os.environ['GITHUB_ENV'], 'a') as f:
+              f.write(f"COMMENT_STYLE_COUNT={style_count}\n")
+              f.write(f"COMMENT_GRAMMAR_COUNT={grammar_count}\n")
+              f.write(f"COMMENT_TOTAL_COUNT={len(suggestions)}\n")
+          
           print(f"Processed {len(suggestions)} suggestions.")
           EOL
           
@@ -191,10 +240,38 @@ jobs:
           
       - name: Create summary comment on PR
         run: |
-          # Count suggestions by type
-          STYLE_COUNT=$(jq '[.[] | select(.reason | contains("Style"))] | length' all_suggestions.json)
-          GRAMMAR_COUNT=$(jq '[.[] | select(.reason | contains("Grammar"))] | length' all_suggestions.json)
-          TOTAL_COUNT=$(jq 'length' all_suggestions.json)
+          # Debug output
+          echo "Content of all_suggestions.json:"
+          cat all_suggestions.json
+          
+          # Use the counts from the previous step or count again if needed
+          if [ -z "$COMMENT_TOTAL_COUNT" ]; then
+            echo "Counting suggestions directly from file"
+            STYLE_COUNT=$(jq '[.[] | select(.reason | contains("Style") or .reason | contains("style"))] | length' all_suggestions.json)
+            GRAMMAR_COUNT=$(jq '[.[] | select(.reason | contains("Grammar") or .reason | contains("grammar"))] | length' all_suggestions.json)
+            TOTAL_COUNT=$(jq 'length' all_suggestions.json)
+          else
+            echo "Using counts from previous step"
+            STYLE_COUNT=$COMMENT_STYLE_COUNT
+            GRAMMAR_COUNT=$COMMENT_GRAMMAR_COUNT
+            TOTAL_COUNT=$COMMENT_TOTAL_COUNT
+          fi
+          
+          echo "Counted issues from file: Total=$TOTAL_COUNT, Style=$STYLE_COUNT, Grammar=$GRAMMAR_COUNT"
+          echo "Counted issues from processing: Style=$TOTAL_STYLE_ISSUES, Grammar=$TOTAL_GRAMMAR_ISSUES"
+          
+          # Use the maximum of the two counts
+          if [ $TOTAL_STYLE_ISSUES -gt $STYLE_COUNT ]; then
+            STYLE_COUNT=$TOTAL_STYLE_ISSUES
+          fi
+          
+          if [ $TOTAL_GRAMMAR_ISSUES -gt $GRAMMAR_COUNT ]; then
+            GRAMMAR_COUNT=$TOTAL_GRAMMAR_ISSUES
+          fi
+          
+          TOTAL_COUNT=$((STYLE_COUNT + GRAMMAR_COUNT))
+          
+          echo "Final counts: Total=$TOTAL_COUNT, Style=$STYLE_COUNT, Grammar=$GRAMMAR_COUNT"
           
           if [ "$TOTAL_COUNT" -gt 0 ]; then
             # Create a summary comment
@@ -207,5 +284,6 @@ jobs:
               -d "{\"body\":\"$COMMENT\"}" \
               "https://api.github.com/repos/${{ github.repository }}/issues/${{ env.PR_NUMBER }}/comments"
           else
-            echo "No issues found."
+            echo "No issues found in all_suggestions.json, but this might be incorrect."
+            echo "Please check if the suggestions were properly generated and combined."
           fi
