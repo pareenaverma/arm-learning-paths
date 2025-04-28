@@ -49,18 +49,22 @@ jobs:
           echo "HEAD_REF=$HEAD_REF" >> $GITHUB_ENV
           echo "BASE_SHA=$BASE_SHA" >> $GITHUB_ENV
           
-      - name: Get changed files
+      - name: Get changed files and their patch data
         id: changed-files
         run: |
-          # Get the list of files changed in the PR
-          FILES=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/${{ github.repository }}/pulls/${{ env.PR_NUMBER }}/files" | \
-            jq -r '.[] | select(.filename | endswith(".md") or endswith(".mdx")) | .filename')
+          # Get the list of files changed in the PR with patch data
+          PR_FILES=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls/${{ env.PR_NUMBER }}/files")
+          
+          echo "$PR_FILES" > pr_files.json
+          
+          # Extract just the markdown files
+          MD_FILES=$(echo "$PR_FILES" | jq -r '.[] | select(.filename | endswith(".md") or endswith(".mdx")) | .filename')
           
           echo "Changed markdown files:"
-          echo "$FILES"
+          echo "$MD_FILES"
           echo "FILES<<EOF" >> $GITHUB_ENV
-          echo "$FILES" >> $GITHUB_ENV
+          echo "$MD_FILES" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
           
       - name: Check style and create suggestions
@@ -95,14 +99,45 @@ jobs:
             fi
           done
           
-          # Create review comments using a separate Python script to avoid shell escaping issues
+          # Create review comments using a separate Python script
           cat > create_review.py << 'EOL'
           import json
           import requests
           import os
           import sys
+          import re
           
-          # Load suggestions
+          # Load PR files data to get changed lines
+          with open('pr_files.json', 'r') as f:
+              pr_files = json.load(f)
+          
+          # Create a map of changed lines by file
+          changed_lines = {}
+          for file_data in pr_files:
+              filename = file_data['filename']
+              if not (filename.endswith('.md') or filename.endswith('.mdx')):
+                  continue
+                  
+              # Extract changed line numbers from the patch
+              if 'patch' in file_data:
+                  patch = file_data['patch']
+                  lines = []
+                  for hunk in patch.split('\n@@'):
+                      if not hunk:
+                          continue
+                      # Extract the line numbers from the hunk header
+                      match = re.search(r'\+(\d+),(\d+)', hunk)
+                      if match:
+                          start = int(match.group(1))
+                          count = int(match.group(2))
+                          lines.extend(range(start, start + count))
+              else:
+                  # If no patch (e.g., for new files), consider all lines changed
+                  lines = range(1, 10000)  # Arbitrary large number
+                  
+              changed_lines[filename] = lines
+          
+          # Load style suggestions
           with open('all_suggestions.json', 'r') as f:
               suggestions = json.load(f)
           
@@ -110,10 +145,29 @@ jobs:
               print("No style issues found.")
               sys.exit(0)
           
-          # Group suggestions by file
-          file_suggestions = {}
+          # Filter suggestions to only include those on changed lines
+          filtered_suggestions = []
           for sugg in suggestions:
               file_path = sugg["file"].replace('temp_files/', '')
+              line_num = sugg["line"]
+              
+              # Check if this line was changed in the PR
+              if file_path in changed_lines and line_num in changed_lines[file_path]:
+                  # Use the full path from the PR files
+                  for pr_file in pr_files:
+                      if pr_file['filename'].endswith(file_path):
+                          sugg["file"] = pr_file['filename']
+                          filtered_suggestions.append(sugg)
+                          break
+          
+          if not filtered_suggestions:
+              print("No style issues found on changed lines.")
+              sys.exit(0)
+          
+          # Group suggestions by file
+          file_suggestions = {}
+          for sugg in filtered_suggestions:
+              file_path = sugg["file"]
               if file_path not in file_suggestions:
                   file_suggestions[file_path] = []
               file_suggestions[file_path].append(sugg)
@@ -144,6 +198,10 @@ jobs:
                   "event": "COMMENT",
                   "comments": review_comments
               }
+              
+              print(f"Submitting review with {len(review_comments)} comments")
+              print(f"URL: {url}")
+              print(f"First comment: {review_comments[0] if review_comments else 'None'}")
               
               response = requests.post(url, headers=headers, json=data)
               if response.status_code >= 400:
