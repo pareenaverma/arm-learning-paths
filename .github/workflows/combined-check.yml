@@ -1,0 +1,237 @@
+name: Combined Style and Grammar Check
+
+permissions:
+  contents: read
+  pull-requests: write
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'Pull Request Number'
+        required: true
+        type: string
+
+jobs:
+  combined-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests markdown beautifulsoup4
+
+      - name: Fetch PR details
+        id: pr-details
+        run: |
+          PR_NUMBER=${{ github.event.inputs.pr_number }}
+          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
+          
+          # Get the PR details using GitHub API
+          PR_DATA=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls/$PR_NUMBER")
+          
+          HEAD_SHA=$(echo "$PR_DATA" | jq -r .head.sha)
+          HEAD_REF=$(echo "$PR_DATA" | jq -r .head.ref)
+          BASE_SHA=$(echo "$PR_DATA" | jq -r .base.sha)
+          
+          echo "HEAD_SHA=$HEAD_SHA" >> $GITHUB_ENV
+          echo "HEAD_REF=$HEAD_REF" >> $GITHUB_ENV
+          echo "BASE_SHA=$BASE_SHA" >> $GITHUB_ENV
+          
+      - name: Get changed files and their patch data
+        id: changed-files
+        run: |
+          # Get the list of files changed in the PR with patch data
+          PR_FILES=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls/${{ env.PR_NUMBER }}/files")
+          
+          echo "$PR_FILES" > pr_files.json
+          
+          # Extract just the markdown files
+          MD_FILES=$(echo "$PR_FILES" | jq -r '.[] | select(.filename | endswith(".md") or endswith(".mdx")) | .filename')
+          
+          echo "Changed markdown files:"
+          echo "$MD_FILES"
+          echo "FILES<<EOF" >> $GITHUB_ENV
+          echo "$MD_FILES" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          
+      - name: Run combined checks
+        run: |
+          # Create a directory for storing file contents
+          mkdir -p temp_files
+          
+          # Process each changed file
+          echo "$FILES" | while read -r file; do
+            if [ -z "$file" ]; then
+              continue
+            fi
+            
+            echo "Processing $file"
+            
+            # Get file content from the PR head
+            curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              "https://api.github.com/repos/${{ github.repository }}/contents/$file?ref=${{ env.HEAD_REF }}" | \
+              jq -r '.content' | base64 --decode > "temp_files/$(basename "$file")"
+            
+            # Run style check
+            python3 tools/enhanced_style_check.py --file "temp_files/$(basename "$file")" --output "temp_files/$(basename "$file").style.json"
+            
+            # Run grammar check
+            python3 tools/grammar_check.py --file "temp_files/$(basename "$file")" --output "temp_files/$(basename "$file").grammar.json"
+            
+            # Combine results
+            python3 - <<EOL
+import json
+import os
+
+# Load style suggestions
+style_file = "temp_files/$(basename "$file").style.json"
+style_suggestions = []
+if os.path.exists(style_file):
+    with open(style_file, "r") as f:
+        style_suggestions = json.load(f)
+
+# Load grammar suggestions
+grammar_file = "temp_files/$(basename "$file").grammar.json"
+grammar_suggestions = []
+if os.path.exists(grammar_file):
+    with open(grammar_file, "r") as f:
+        grammar_suggestions = json.load(f)
+
+# Combine suggestions
+combined_suggestions = style_suggestions + grammar_suggestions
+
+# Sort by line number
+combined_suggestions.sort(key=lambda x: x["line"])
+
+# Save combined suggestions
+with open("temp_files/$(basename "$file").combined.json", "w") as f:
+    json.dump(combined_suggestions, f, indent=2)
+
+print(f"Combined {len(style_suggestions)} style suggestions and {len(grammar_suggestions)} grammar suggestions.")
+EOL
+          done
+          
+          # Combine all suggestions
+          echo "[]" > all_suggestions.json
+          for json_file in temp_files/*.combined.json; do
+            if [ -f "$json_file" ]; then
+              # Merge JSON files
+              jq -s '.[0] + .[1]' all_suggestions.json "$json_file" > temp.json
+              mv temp.json all_suggestions.json
+            fi
+          done
+          
+          # Create individual comments for each suggestion
+          cat > create_comments.py << 'EOL'
+          import json
+          import requests
+          import os
+          import sys
+          import time
+          
+          # Load PR files data
+          with open('pr_files.json', 'r') as f:
+              pr_files = json.load(f)
+          
+          # Create a map of file paths
+          file_paths = {}
+          for file_data in pr_files:
+              basename = os.path.basename(file_data['filename'])
+              file_paths[basename] = file_data['filename']
+          
+          # Load combined suggestions
+          with open('all_suggestions.json', 'r') as f:
+              suggestions = json.load(f)
+          
+          if not suggestions:
+              print("No issues found.")
+              sys.exit(0)
+          
+          # Get environment variables
+          pr_number = os.environ.get('PR_NUMBER')
+          repo = os.environ.get('GITHUB_REPOSITORY')
+          github_token = os.environ.get('GITHUB_TOKEN')
+          
+          # Count suggestion types
+          style_count = sum(1 for sugg in suggestions if "Style" in sugg.get('reason', ''))
+          grammar_count = sum(1 for sugg in suggestions if "Grammar" in sugg.get('reason', ''))
+          
+          print(f"Processing {len(suggestions)} suggestions: {style_count} style issues, {grammar_count} grammar issues")
+          
+          # Process each suggestion
+          for i, sugg in enumerate(suggestions):
+              # Get the full file path
+              basename = os.path.basename(sugg["file"])
+              if basename in file_paths:
+                  file_path = file_paths[basename]
+              else:
+                  file_path = sugg["file"].replace('temp_files/', '')
+              
+              # Create a comment with suggestion
+              issue_type = "Style" if "Style" in sugg.get('reason', '') else "Grammar"
+              comment_body = f"**{issue_type} suggestion**: {sugg['reason']}\n\n```suggestion\n{sugg['suggested']}\n```"
+              
+              # Create the comment using GitHub API
+              url = f"https://api.github.com/repos/{repo}/pulls/{pr_number}/comments"
+              headers = {
+                  "Authorization": f"token {github_token}",
+                  "Accept": "application/vnd.github.v3+json"
+              }
+              data = {
+                  "body": comment_body,
+                  "commit_id": os.environ.get('HEAD_SHA'),
+                  "path": file_path,
+                  "line": sugg["line"]
+              }
+              
+              print(f"Creating comment {i+1}/{len(suggestions)} for {file_path}:{sugg['line']}")
+              response = requests.post(url, headers=headers, json=data)
+              
+              if response.status_code >= 400:
+                  print(f"Error creating comment: {response.status_code}")
+                  print(response.text)
+              else:
+                  print(f"Created comment: {response.status_code}")
+              
+              # Add a small delay to avoid rate limiting
+              time.sleep(1)
+          
+          print(f"Processed {len(suggestions)} suggestions.")
+          EOL
+          
+          # Run the Python script with environment variables
+          GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} python3 create_comments.py
+          
+      - name: Create summary comment on PR
+        run: |
+          # Count suggestions by type
+          STYLE_COUNT=$(jq '[.[] | select(.reason | contains("Style"))] | length' all_suggestions.json)
+          GRAMMAR_COUNT=$(jq '[.[] | select(.reason | contains("Grammar"))] | length' all_suggestions.json)
+          TOTAL_COUNT=$(jq 'length' all_suggestions.json)
+          
+          if [ "$TOTAL_COUNT" -gt 0 ]; then
+            # Create a summary comment
+            COMMENT="## Style and Grammar Check Results\n\nI found $TOTAL_COUNT issues that could be improved:\n- $STYLE_COUNT style issues\n- $GRAMMAR_COUNT grammar issues\n\nEach issue has been added as a suggestion comment that you can directly commit or dismiss."
+            
+            # Post the comment to the PR
+            curl -s -X POST \
+              -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Accept: application/vnd.github.v3+json" \
+              -d "{\"body\":\"$COMMENT\"}" \
+              "https://api.github.com/repos/${{ github.repository }}/issues/${{ env.PR_NUMBER }}/comments"
+          else
+            echo "No issues found."
+          fi
