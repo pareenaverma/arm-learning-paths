@@ -2,7 +2,7 @@
 """
 Enhanced style checker for Arm Learning Paths content.
 This script checks markdown files against writing style guidelines from a JSON file
-and provides replacement suggestions with proper tense handling.
+and uses spaCy for passive voice detection.
 """
 
 import argparse
@@ -11,6 +11,27 @@ import os
 import re
 import sys
 from pathlib import Path
+
+# Import spaCy if available
+try:
+    import spacy
+    SPACY_AVAILABLE = True
+    # Try to load the English model
+    try:
+        nlp = spacy.load("en_core_web_sm")
+    except:
+        print("Warning: spaCy model 'en_core_web_sm' not found. Will try to download it.")
+        try:
+            from spacy.cli import download
+            download("en_core_web_sm")
+            nlp = spacy.load("en_core_web_sm")
+            print("Successfully downloaded and loaded spaCy model.")
+        except:
+            print("Error: Could not download spaCy model. Passive voice detection will be limited.")
+            SPACY_AVAILABLE = False
+except ImportError:
+    print("Warning: spaCy not installed. Using basic passive voice detection.")
+    SPACY_AVAILABLE = False
 
 def load_style_rules(rules_file):
     """Load style rules from a JSON file."""
@@ -42,6 +63,54 @@ def is_in_yaml_frontmatter(lines, line_index):
     
     # If we've seen an odd number of markers, we're in frontmatter
     return frontmatter_markers % 2 == 1
+
+def detect_passive_voice_with_spacy(text):
+    """
+    Detect passive voice using spaCy's dependency parsing.
+    Returns a list of (passive_text, suggested_active) tuples.
+    """
+    if not SPACY_AVAILABLE:
+        return []
+    
+    doc = nlp(text)
+    passive_constructions = []
+    
+    for token in doc:
+        # Look for passive auxiliary verbs
+        if token.dep_ == "auxpass":
+            # Find the main verb
+            verb = token.head
+            
+            # Find the subject (usually nsubjpass)
+            subject = None
+            for child in verb.children:
+                if child.dep_ == "nsubjpass":
+                    subject = child
+                    break
+            
+            # Find the agent (usually introduced by "by")
+            agent = None
+            for child in verb.children:
+                if child.dep_ == "agent":
+                    for agent_child in child.children:
+                        if agent_child.dep_ == "pobj":
+                            agent = agent_child
+                            break
+                    break
+            
+            # If we have both subject and agent, we can suggest an active voice alternative
+            if subject and agent:
+                # Extract the spans of text
+                passive_span = doc[max(0, subject.i - 1):min(len(doc), verb.i + 2)]
+                if agent.i > verb.i:
+                    passive_span = doc[max(0, subject.i - 1):min(len(doc), agent.i + 1)]
+                
+                # Create active voice suggestion
+                active_suggestion = f"{agent.text} {verb.lemma_} {subject.text}"
+                
+                passive_constructions.append((passive_span.text, active_suggestion))
+    
+    return passive_constructions
 
 def fix_passive_voice(line):
     """
@@ -84,6 +153,61 @@ def check_style(content, file_path, style_rules):
     suggestions = []
     lines = content.split("\n")
     
+    # First, check for passive voice using spaCy if available
+    if SPACY_AVAILABLE:
+        # Process each paragraph separately to maintain context
+        paragraphs = []
+        current_paragraph = []
+        
+        for i, line in enumerate(lines):
+            # Skip code blocks, YAML frontmatter, headings, and links
+            if (is_in_code_block(lines, i) or 
+                is_in_yaml_frontmatter(lines, i) or 
+                re.match(r'^#+\s', line) or 
+                re.search(r'^\s*\[.*\]:\s*', line)):
+                # End the current paragraph if any
+                if current_paragraph:
+                    paragraphs.append((current_paragraph[0], " ".join(current_paragraph[1])))
+                    current_paragraph = []
+                continue
+            
+            # Skip empty lines - they end paragraphs
+            if not line.strip():
+                if current_paragraph:
+                    paragraphs.append((current_paragraph[0], " ".join(current_paragraph[1])))
+                    current_paragraph = []
+                continue
+            
+            # Add line to current paragraph
+            if not current_paragraph:
+                current_paragraph = [i, [line]]
+            else:
+                current_paragraph[1].append(line)
+        
+        # Add the last paragraph if any
+        if current_paragraph:
+            paragraphs.append((current_paragraph[0], " ".join(current_paragraph[1])))
+        
+        # Check each paragraph for passive voice
+        for start_line, paragraph_text in paragraphs:
+            passive_constructions = detect_passive_voice_with_spacy(paragraph_text)
+            
+            for passive_text, active_suggestion in passive_constructions:
+                # Find which line contains this passive construction
+                line_offset = 0
+                for j, line in enumerate(lines[start_line:start_line + 10]):  # Look at next 10 lines max
+                    if passive_text in line:
+                        line_index = start_line + j
+                        suggestions.append({
+                            "file": file_path,
+                            "line": line_index + 1,  # 1-based line numbers
+                            "original": line,
+                            "suggested": line.replace(passive_text, active_suggestion),
+                            "reason": "Convert passive voice to active voice for clarity and directness (detected by spaCy)."
+                        })
+                        break
+    
+    # Then check each line against style rules
     for i, line in enumerate(lines):
         # Skip code blocks and YAML frontmatter
         if is_in_code_block(lines, i) or is_in_yaml_frontmatter(lines, i):
@@ -97,26 +221,27 @@ def check_style(content, file_path, style_rules):
         if re.search(r'^\s*\[.*\]:\s*', line):
             continue
             
-        # Check for passive voice (special case)
-        passive_patterns = [
-            r'\b(?:is|are|was|were)\s+\w+ed\s+by\b',
-            r'\b(?:is|are|was|were)\s+(?:handled|managed|created|generated|provided)\s+by\b'
-        ]
-        
-        for pattern in passive_patterns:
-            if re.search(pattern, line, re.IGNORECASE):
-                # Try to fix passive voice
-                fixed_line = fix_passive_voice(line)
-                if fixed_line != line:
-                    suggestions.append({
-                        "file": file_path,
-                        "line": i + 1,
-                        "original": line,
-                        "suggested": fixed_line,
-                        "reason": "Convert passive voice to active voice for clarity and directness."
-                    })
-                    # Only one suggestion per line to avoid conflicts
-                    break
+        # Check for passive voice using regex (as fallback)
+        if not SPACY_AVAILABLE:
+            passive_patterns = [
+                r'\b(?:is|are|was|were)\s+\w+ed\s+by\b',
+                r'\b(?:is|are|was|were)\s+(?:handled|managed|created|generated|provided)\s+by\b'
+            ]
+            
+            for pattern in passive_patterns:
+                if re.search(pattern, line, re.IGNORECASE):
+                    # Try to fix passive voice
+                    fixed_line = fix_passive_voice(line)
+                    if fixed_line != line:
+                        suggestions.append({
+                            "file": file_path,
+                            "line": i + 1,
+                            "original": line,
+                            "suggested": fixed_line,
+                            "reason": "Convert passive voice to active voice for clarity and directness."
+                        })
+                        # Only one suggestion per line to avoid conflicts
+                        break
         
         # If we already have a suggestion for this line, skip further checks
         if any(sugg["line"] == i + 1 for sugg in suggestions):
@@ -173,7 +298,17 @@ def main():
     parser.add_argument("--dir", help="Directory containing markdown files to check")
     parser.add_argument("--rules", default="tools/style_rules.json", help="JSON file containing style rules")
     parser.add_argument("--output", default="style_suggestions.json", help="Output file for suggestions")
+    parser.add_argument("--install-spacy", action="store_true", help="Install spaCy and download the English model")
     args = parser.parse_args()
+    
+    # Install spaCy if requested
+    if args.install_spacy:
+        print("Installing spaCy and downloading the English model...")
+        import subprocess
+        subprocess.call([sys.executable, "-m", "pip", "install", "spacy"])
+        subprocess.call([sys.executable, "-m", "spacy", "download", "en_core_web_sm"])
+        print("Installation complete. Please run the script again without --install-spacy.")
+        sys.exit(0)
     
     if not args.file and not args.dir:
         print("Error: Please provide either --file or --dir argument")
