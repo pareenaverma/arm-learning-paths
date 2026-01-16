@@ -12,7 +12,7 @@ learning_objectives:
 
 prerequisites:
     - An AWS account.
-    - A computer with Docker, Terraform, the Amazon eksctl command-line interface, and kubectl installed.
+    - A computer with Docker, Docker Compose, Terraform, the Amazon eksctl command-line interface, and kubectl installed.
 
 author: 
     - Pranay Bakre
