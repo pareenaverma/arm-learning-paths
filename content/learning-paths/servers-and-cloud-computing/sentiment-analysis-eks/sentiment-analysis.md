@@ -53,7 +53,7 @@ variable "AWS_profile" {
 
 To create the Amazon EKS cluster, execute the following commands:
 
-```console
+```bash
 terraform init
 terraform apply --auto-approve
 ```
@@ -66,44 +66,44 @@ If you want to use an AWS CLI profile that is not the default, make sure that yo
 
 Update the `kubeconfig` file to access the deployed EKS cluster with the following command:
 
-```console
+```bash
 aws eks --region $(terraform output -raw region) update-kubeconfig --name $(terraform output -raw cluster_name) --profile <Your_AWS_Profile>
 ```
 
-Create a service account for Apache spark:
+Create a service account for Apache Spark:
 
-```console
+```bash
 kubectl create serviceaccount spark
 kubectl create clusterrolebinding spark-role --clusterrole=edit --serviceaccount=default:spark --namespace=default
 ```
 
 ## Build the sentiment analysis JAR file
 
-Navigate to the `sentiment_analysis` folder to create a JAR file () file for the sentiment analyzer.
+Navigate to the `sentiment_analysis` folder to create a JAR file for the sentiment analyzer.
 
 {{% notice Note %}}
-JAR is an acronym for Java ARchive, and is a compressed archive file format that contains Java related-files and metadata.{{% /notice %}}
+JAR is an acronym for Java ARchive, and is a compressed archive file format that contains Java-related files and metadata.
+{{% /notice %}}
 
 You will need `sbt` installed. If you are running Ubuntu, you can install it with:
 
-```console
+```bash
 echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | sudo tee /etc/apt/sources.list.d/sbt.list
-echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | sudo tee /etc/apt/sources.list.d/sbt_old.list
-curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | sudo apt-key add
+curl -fsSL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | sudo gpg --dearmor -o /usr/share/keyrings/sbt-archive-keyring.gpg
 sudo apt-get update
 sudo apt-get install sbt
 ```
 
-If you have another operating system, refer to [Installing sbt](https://www.scala-sbt.org/1.x/docs/Setup.html).
+If you have another operating system, refer to [Installing sbt](https://www.scala-sbt.org/download.html).
 
-```console
+```bash
 cd ../sentiment_analysis
 sbt assembly
 ```
 
 A JAR file is created at the following location:
 
-```console
+```output
 sentiment_analysis/target/scala-2.13/bigdata-assembly-0.1.jar
 ```
 
@@ -115,25 +115,25 @@ The Spark repository contains a script to build the container image that you nee
 
 Execute this script on your Arm-based computer to build the arm64 image.
 
-In the current working directory, use the following commands to get the `apache spark` tar. 
+In the current working directory, use the following commands to get the Apache Spark tar file. 
 
-Extract this repository prior to building the image:
+Extract this file before building the image:
 
-```console
-wget https://archive.apache.org/dist/spark/spark-3.4.3/spark-3.4.3-bin-hadoop3-scala2.13.tgz
-tar -xvzf spark-3.4.3-bin-hadoop3-scala2.13.tgz
-cd spark-3.4.3-bin-hadoop3-scala2.13
+```bash
+wget https://archive.apache.org/dist/spark/spark-3.5.3/spark-3.5.3-bin-hadoop3-scala2.13.tgz
+tar -xvzf spark-3.5.3-bin-hadoop3-scala2.13.tgz
+cd spark-3.5.3-bin-hadoop3-scala2.13
 ```
 
 Copy the JAR file generated in the previous step to the following location:
 
-```console
+```bash
 cp ../sentiment_analysis/target/scala-2.13/bigdata-assembly-0.1.jar jars/
 ```
 
-To build the docker container, use the following commands, ensuring that you substitute the name of your container repository before executing them:
+To build the Docker container, use the following commands, ensuring that you substitute the name of your container repository before executing them:
 
-```console
+```bash
 bin/docker-image-tool.sh -r <your-docker-repository> -t sentiment-analysis build
 bin/docker-image-tool.sh -r <your-docker-repository> -t sentiment-analysis push
 ```
@@ -146,7 +146,7 @@ The following commands run the application with two executors, each with 12 core
 
  Before executing the `spark-submit` command, set the following variables (replacing values in angle brackets with your values):
 
-```console
+```bash
 export K8S_API_SERVER_ADDRESS=<K8S_API_SERVER_ENDPOINT>
 export ES_ADDRESS=<IP_ADDRESS_OF_ELASTICS_SEARCH>
 export CHECKPOINT_BUCKET=<S3_BUCKET_NAME>
@@ -155,7 +155,7 @@ export ECR_ADDRESS=<ECR_REGISTERY_ADDRESS>
 
 Execute the `spark-submit` command:
 
-```console
+```bash
 bin/spark-submit \
       --class bigdata.SentimentAnalysis \
       --master k8s://K8S_API_SERVER_ADDRESS:443 \
@@ -187,45 +187,49 @@ spark-twitter                               1/1     Running   0          12m
 
 ## X Sentiment Analysis
 
-Create a twitter(X) [developer account](https://developer.x.com/en/docs/x-api/getting-started/getting-access-to-the-x-api) and download the `bearer token`. 
+Create an X [developer account](https://developer.x.com/en/portal/dashboard) and download the bearer token. 
 
 Use the following commands to set the bearer token and fetch the posts:
 
-```console
+```bash
 export BEARER_TOKEN=<BEARER_TOKEN_FROM_X>
 python3 scripts/xapi_tweets.py
 ```
+
 {{% notice Note %}}
-You might need to install the following python packages, if you run into any dependency issues:
-* pip3 install requests.
-* pip3 install boto3.
+You might need to install the following Python packages if you run into any dependency issues:
+
+```bash
+pip3 install requests
+pip3 install boto3
+```
 {{% /notice %}}
 
 You can modify the script `xapi_tweets.py` and use your own keywords. 
 
 Here is the code which includes some sample keywords: 
 
-```output
+```python
 query_params = {'query': "(#onArm OR @Arm OR #Arm OR #GenAI) -is:retweet lang:en",
                 'tweet.fields': 'lang'}
 ```
 
-Use the following command to send these processed tweets to Elasticsearch
+Use the following command to send these processed posts to Elasticsearch:
 
-```console
+```bash
 python3 csv_to_kinesis.py
 ```
 
-Navigate to the Kibana dashboard using the following URL and analyze the tweets:
+Navigate to the Kibana dashboard using the following URL and analyze the posts:
 
 ```console
 http://<IP_Address_of_ES_and_Kibana>:5601
 ```
 
-## Environment Clean-up
+## Environment clean-up
 
-Following this Learning Path will deploy many artifacts in your cloud account. Remember to destroy the resources after you have finished. Use the following command to cleanup the resources:
+Following this Learning Path will deploy many artifacts in your cloud account. Remember to destroy the resources after you have finished. Use the following command to clean up the resources:
 
-```console
+```bash
 terraform destroy
 ```

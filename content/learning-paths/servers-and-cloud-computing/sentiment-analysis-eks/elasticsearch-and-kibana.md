@@ -25,10 +25,9 @@ Before you begin, ensure that Docker and Docker Compose have been installed on y
 Use a text editor to create a `docker-compose.yml` file, and copy-and-paste in the contents below:
 
 ```yml
-version: '2.18.1'
 services:
   elasticsearch:
-    image: elasticsearch:8.15.2
+    image: elasticsearch:8.16.1
     container_name: elasticsearch
     environment:
       - discovery.type=single-node
@@ -41,7 +40,7 @@ services:
       - elk
 
   kibana:
-    image: kibana:8.15.2
+    image: kibana:8.16.1
     container_name: kibana
     ports:
       - "5601:5601"
@@ -60,15 +59,15 @@ networks:
 
 Use the following command to deploy Elasticsearch and the Kibana Dashboard:
 
-```console
+```bash
 docker compose up
 ```
-If you do not have the `docker compose` plugin already installed, you can install it through the following commands:
+If you don't have the `docker compose` plugin already installed, you can install it with the following commands:
 
-{{% notice Note %}}
+```bash
 sudo apt-get update
 sudo apt-get install docker-compose-plugin
-{{% /notice %}}
+```
 
 After the dashboard is set up, use the public IP of your server on port `5601` to access the Kibana dashboard. See Figure 2.
 
