@@ -18,14 +18,16 @@ author: Ying Yu
 ### Tags
 skilllevels: Introductory
 subjects: Databases
-cloud_service_providers: AWS
+cloud_service_providers:
+  - AWS
+  - Microsoft Azure
+  - Google Cloud
+  - Oracle
 
 armips:
 - Neoverse
 
-layout: learningpathall
 
-learning_path_main_page: 'yes'
 
 operatingsystems:
 - Linux

@@ -17,6 +17,11 @@ author: Pareena Verma
 ### Tags
 skilllevels: Introductory
 subjects: Databases
+cloud_service_providers:
+  - AWS
+  - Microsoft Azure
+  - Google Cloud
+  - Oracle
 armips:
     - Neoverse
 tools_software_languages:
@@ -41,7 +46,7 @@ further_reading:
         type: documentation
     - resource:
         title: Improve ClickHouse performance on Arm-based AWS Graviton3 servers
-        link: https://community.arm.com/arm-community-blogs/b/infrastructure-solutions-blog/posts/improve-clickhouse-performance-up-to-26-by-using-aws-graviton3
+        link: https://developer.arm.com/community/arm-community-blogs/b/servers-and-cloud-computing-blog/posts/improve-clickhouse-performance-up-to-26-by-using-aws-graviton3
         type: blog
 
 

@@ -13,7 +13,7 @@ In this section, you will build and run the Arm64.HeadlessIoT project you have j
 ## Building and running the application
 To build and run the application proceed as follows. 
 
-Open the command prompt window, go to the project’s folder and type:
+Open the command prompt window, go to the project's folder and type:
 ```console
 dotnet run
 ```
@@ -58,13 +58,13 @@ The web server outputs an emulated sensor reading which in this case reported a 
 
 To test the POST method of the `IoTController` class, use curl, Postman, or Swagger. Swagger is the simplest to use as it's available in the project you just created.
 
-To access Swagger, type http://localhost:<port>/swagger in the web browser’s address bar. This URL takes you to the following screen:
+To access Swagger, type http://localhost:<port>/swagger in the web browser's address bar. This URL takes you to the following screen:
 
-![fig3](figures/03.png)
+![fig3](figures/03.webp)
 
 Now, expand the **POST** section and click the **Try it out** button. The caption of this button will change to **Cancel**, and the **isActive** drop-down list becomes active. Set **isActive** to false, and then click **Execute**:
 
-![fig4](figures/04.png)
+![fig4](figures/04.webp)
 
 This action sends the **POST** request to **IoTController** and disables the emulator. All subsequent **GET** calls to the **IoTController** will return the last known sensor reading (which is the final reading generated before disabling the emulator). When you set **isActive** back to true and send the **GET** request to the web server, you will see the temperature setting update.
 

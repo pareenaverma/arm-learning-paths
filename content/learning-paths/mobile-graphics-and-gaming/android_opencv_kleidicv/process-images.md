@@ -18,7 +18,8 @@ This Learning Path uses a [cameraman image](https://github.com/antimatter15/came
 
 For easier navigation between files in Android Studio, use the **Project** menu option from the project browser pane.
 
-## `ImageOperation`
+## Create the ImageOperation class
+
 You will now create an enum class, which is an enumeration, for a set of image processing operations in an application that uses the OpenCV library. 
 
 In the `src/main/java/com/arm/arm64kleidicvdemo` file directory, add the `ImageOperation.kt` file, and modify it as follows:
@@ -89,7 +90,8 @@ Generally, only single-channel images are supported; with Gaussian blur being an
 
 There is also the companion object that provides a utility method `fromDisplayName`. This function maps the string `displayName` to its corresponding enum constant by iterating through the list of all enum values, and returns null if no match is found.
 
-## `ImageProcessor`
+## Create the ImageProcessor class
+
 Now add the `ImageProcessor.kt`:
 
 ```Kotlin
@@ -110,7 +112,7 @@ The `ImageProcessor` class acts as a simple orchestrator for image processing ta
 
 This design is clean and modular, allowing developers to easily add new processing operations or reuse the `ImageProcessor` in different parts of an application. It aligns with object-oriented principles by promoting encapsulation and reducing processing logic complexity.
 
-## `PerformanceMetrics`
+## Create the PerformanceMetrics class
 Now supplement the project with the `PerformanceMetrics.kt` file:
 
 ```Kotlin
@@ -150,7 +152,8 @@ The `PerformanceMetrics` class analyzes and summarizes performance measurements,
 
 By encapsulating the raw data `durationsNano` and exposing only meaningful metrics through computed properties, the class ensures clear separation of data and functionality. The overridden `toString` method makes it easy to generate a human-readable summary for reporting or debugging purposes. You can use this method to report the performance metrics to the user.
 
-## `MainActivity`
+## Create the MainActivity
+
 You can now move on to modify `MainActivity.kt` as follows:
 
 ```Kotlin
@@ -305,23 +308,23 @@ class MainActivity : AppCompatActivity() {
 
 This Kotlin code defines the main activity for our application. 
 
-The `MainActivity` class extends `AppCompatActivity`, serving as the entry point for the app’s user interface. It manages the lifecycle of the activity and orchestrates the image processing logic.
+The `MainActivity` class extends `AppCompatActivity`, serving as the entry point for the app's user interface. It manages the lifecycle of the activity and orchestrates the image processing logic.
 
 There are several members of this class:
 * `viewBinding` - manages UI components through the `ActivityMainBinding` class, simplifying access to views in the layout.
 * `imageProcessor` - an instance of the `ImageProcessor` class that applies selected image operations.
-* `originalMat` - a Mat object representing the original image loaded from the app’s assets.
+* `originalMat` - a Mat object representing the original image loaded from the app's assets.
 * `currentBitmap` - stores the current image as a Bitmap for display.
 * `REPETITIONS` - number of times each operation is performed for performance measurement.
-* `TEST_IMAGE` - name of the test image located in the app’s assets.
+* `TEST_IMAGE` - name of the test image located in the app's assets.
 
 When the activity starts, it sets up the user interface, initializes OpenCV, and sets up UI listeners:
 
 The activity also implements several helper methods:
 1. `setupSpinner` - populates the spinner with the names of available ImageOperation enums.
 2. `showToast` - displays a short toast message for user feedback.
-3. `loadImage` - loads the test image (img.png) from the app’s assets. Then, the method converts the image into a Bitmap and stores it for display. The bitmap is also converted to an OpenCV Mat object and changed its color format to grayscale, which is used in OpenCV.
-4. `displayAndStoreBitmap` - updates the app’s ImageView to display the loaded image.
+3. `loadImage` - loads the test image (img.png) from the app's assets. Then, the method converts the image into a Bitmap and stores it for display. The bitmap is also converted to an OpenCV Mat object and changed its color format to grayscale, which is used in OpenCV.
+4. `displayAndStoreBitmap` - updates the app's ImageView to display the loaded image.
 5. `convertBitmapToMat` - converts the Bitmap to a Mat using OpenCV utilities.
 6. `processImage` - this method performs the following:
 	•	Validates if an image is loaded.
@@ -332,7 +335,8 @@ The activity also implements several helper methods:
 7. `measureOperationTime` - Measures the execution time of an operation in nanoseconds using System.nanoTime().
 8. `displayProcessedImage`. This method converts the processed Mat back to a Bitmap for display and updates the ImageView with the processed image.
 
-## `Databinding`
+## Add Databinding
+
 Finally, modify `build.gradle.kts` by adding the databinding under build features:
 
 ```JSON

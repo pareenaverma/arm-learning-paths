@@ -89,7 +89,7 @@ bool UseSimpleArrayEquals                     = false                           
 
 Depending on your application, you may want to investigate the vector processing flags for SIMD, NEON, SVE, and CRC. 
 
-You can try [Process Watch](https://learn.arm.com/learning-paths/servers-and-cloud-computing/processwatch/) to monitor the usage of SIMD and CRC instructions. 
+You can try [Process Watch](/learning-paths/servers-and-cloud-computing/processwatch/) to monitor the usage of SIMD and CRC instructions. 
 
 Refer to the [Java documentation](https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html) for more information about the flags.
 
@@ -192,6 +192,5 @@ For each x86-64 ELF file, check there is a corresponding aarch64 ELF file in the
 
 Here are a few resources:
 - [Improving Java performance on Neoverse N1 systems](https://community.arm.com/arm-community-blogs/b/architectures-and-processors-blog/posts/java-performance-on-neoverse-n1)
-- [Arm resources show how to optimize your Java applications for AArch64](https://blogs.oracle.com/javamagazine/post/java-arm-runtime-switches-benchmarks)
 - [Unlocking Java Performance on Ampere Altra Family Processors](https://amperecomputing.com/tuning-guides/unlocking-java-performance-tuning-guide)
 

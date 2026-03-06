@@ -26,15 +26,16 @@ multi_install: false            # Set to true if first page of multi-page articl
 multitool_install_part: false   # Set to true if a sub-page of a multi-page article, else false
 layout: installtoolsall         # DO NOT MODIFY. Always true for tool install articles
 ---
-This guide is intended to get you up and running with the [Arm Virtual Hardware (AVH) Fixed Virtual Platforms (FVPs)](https://www.arm.com/products/development-tools/simulation/virtual-hardware) on macOS. For a thorough review of all options, refer to the official documentation.
+This guide shows you how to use [Arm Virtual Hardware (AVH) Fixed Virtual Platforms (FVPs)](https://www.arm.com/products/development-tools/simulation/virtual-hardware) on macOS by running them in Docker containers. The [official repository](https://github.com/Arm-Examples/FVPs-on-Mac/blob/main/README.md) provides additional technical details.
 
-## Prerequisites
+
+## What are the prerequisites for running AVH FVPs on macOS?
 
 [Install Docker Desktop on Mac](https://docs.docker.com/desktop/install/mac-install/).
 
 If this is for commercial use, you might require a paid subscription.
 
-## Clone the repo
+## How do I clone the repository?
 
 Open a terminal and set the working directory to the location in which you would like to store the Fast Model. Then run:
 
@@ -44,7 +45,7 @@ git clone https://github.com/Arm-Examples/FVPs-on-Mac.git
 
 This creates the subdirectory `FVPs-on-Mac` in the current working directory.
 
-## Build the Docker wrapper
+## How do I build the Docker wrapper for AVH FVPs?
 
 Run the build script to create the Docker image and populate the `bin` folder with model wrappers:
 
@@ -60,7 +61,7 @@ These wrappers can be used exactly like any native model executable:
 ./bin/FVP_MPS2_Cortex-M3 --version
 ```
 
-## Expose models to local environment
+## How do I expose the models to my local environment?
 
 Add `$(pwd)/FVPs-on-Mac/bin` to `PATH` environment:
 

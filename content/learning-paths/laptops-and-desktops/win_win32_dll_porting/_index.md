@@ -24,7 +24,8 @@ armips:
 operatingsystems:
     - Windows
 tools_software_languages:
-    - C/C++       
+    - C
+    - CPP     
 
 further_reading:
     - resource:

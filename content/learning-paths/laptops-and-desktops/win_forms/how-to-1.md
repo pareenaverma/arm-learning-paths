@@ -21,11 +21,11 @@ Before you begin, install Visual Studio 2022 with .NET Desktop Development workl
 ## Create the project
 Start by creating the project. Open Visual Studio and then click 'Create a new project'. 
 
-![fig1](figures/01.png)
+![fig1](figures/01.webp)
 
 In the 'Create a new project' window, select the 'Windows Forms App' template. 
 
-![fig2](figures/02.png)
+![fig2](figures/02.webp)
 
 This will open the 'Configure your new project' view, in which you should configure the project as follows (refer to the figure below):
 
@@ -179,7 +179,7 @@ namespace Arm64.DesktopApp.WindowsForms.Helpers
 }
 ```
 
-The above code implements two classes: `MatrixHelper` and `PerformanceHelper`. The `MatrixHelper` class implements two private methods: `MatrixMultiplication` and `GenerateRandomMatrix`. The `MatrixMultiplication` method takes two square matrices as input and calculates their product using the mathematical formula explained [here](https://en.wikipedia.org/wiki/Matrix_multiplication). Three 'for' loops are used and the result of the matrix multiplication is stored in the variable result, which is returned by the `MatrixMultiplication` method. The `GenerateRandomMatrix` method is used to generate a square matrix with elements pseudo-randomly generated using the `NextDouble` method of the Random class. Finally, the `MatrixHelper` class also implements the `SquareMatrixMultiplication` method, which generates two matrices of a given size and then calculates their product.
+The above code implements two classes: `MatrixHelper` and `PerformanceHelper`. The `MatrixHelper` class implements two private methods: `MatrixMultiplication` and `GenerateRandomMatrix`. The `MatrixMultiplication` method takes two square matrices as input and calculates their product using the [mathematical formula for matrix multiplication](https://en.wikipedia.org/wiki/Matrix_multiplication). Three 'for' loops are used and the result of the matrix multiplication is stored in the variable result, which is returned by the `MatrixMultiplication` method. The `GenerateRandomMatrix` method is used to generate a square matrix with elements pseudo-randomly generated using the `NextDouble` method of the Random class. Finally, the `MatrixHelper` class also implements the `SquareMatrixMultiplication` method, which generates two matrices of a given size and then calculates their product.
 
 The `PerformanceHelper` class has one method, MeasurePerformance. This method works by invoking a function using the Action delegate, passed as the first parameter of the MeasurePerformance method. The function is invoked several times (as specified by the second parameter, executionCount). After that, the MeasurePerformance method returns the time taken to execute the specific code. To measure the execution time, you will use the System.Diagnostics.Stopwatch class. Specifically, an instance of this class has two useful methods: Restart and Stop. Restart resets and starts the stopwatch, while Stop halts the stopwatch, allowing us to read the time elapsed since the last restart.
 

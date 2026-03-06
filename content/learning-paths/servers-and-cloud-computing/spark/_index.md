@@ -17,7 +17,8 @@ author: Jason Andrews
 ### Tags
 skilllevels: Introductory
 subjects: Databases
-cloud_service_providers: AWS
+cloud_service_providers:
+  - AWS
 
 armips:
     - Neoverse
@@ -29,7 +30,7 @@ tools_software_languages:
 further_reading:
     - resource:
         title: Optimize Spark on AWS Graviton2
-        link: https://community.arm.com/arm-community-blogs/b/infrastructure-solutions-blog/posts/optimize-spark-on-aws-graviton2-best-practices-k-means-clustering
+        link: https://developer.arm.com/community/arm-community-blogs/b/servers-and-cloud-computing-blog/posts/optimize-spark-on-aws-graviton2-best-practices-k-means-clustering
         type: blog
 
     - resource:

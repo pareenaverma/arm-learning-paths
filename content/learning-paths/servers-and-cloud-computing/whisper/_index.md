@@ -25,13 +25,19 @@ skilllevels: Introductory
 armips:
     - Neoverse
 subjects: ML
+cloud_service_providers:
+  - AWS
+  - Microsoft Azure
+  - Google Cloud
+  - Oracle
 operatingsystems:
     - Linux
 tools_software_languages:
     - Python
     - Whisper
     - Demo
-cloud_service_providers: AWS
+    - Hugging Face
+
     
 
 further_reading:

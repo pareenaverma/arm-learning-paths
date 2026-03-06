@@ -13,7 +13,7 @@ In this section, you will learn how to deploy the .NET Aspire application you cr
 To create an Arm64 VM, follow these steps:
 1. Create a Google Cloud Account. If you don’t already have an account, sign up for Google Cloud.
 
-2. Open the Google Cloud Console [here](https://console.cloud.google.com).
+2. Open the [Google Cloud Console](https://console.cloud.google.com).
 
 3. Navigate to Compute Engine. In the Google Cloud Console, open the Navigation menu, and go to **Compute Engine** > **VM Instances**. Enable any relevant APIs if prompted.
 
@@ -28,7 +28,7 @@ To create an Arm64 VM, follow these steps:
 
 The configuration setup should resemble the following:
 
-![fig14](figures/14.png)
+![fig14](figures/14.webp)
 
 6. Configure the Remaining Settings:
     
@@ -37,7 +37,7 @@ The configuration setup should resemble the following:
     * Identity and API Access: keep the default settings.
     * Firewall Settings: Check **Allow HTTP traffic** and **Allow HTTPS traffic**.
 
-![fig15](figures/15.png)
+![fig15](figures/15.webp)
 
 7. Click the **Create** Button and wait for the VM to be created.
 
@@ -45,7 +45,7 @@ The configuration setup should resemble the following:
 After creating the VM, connect to it as follows:
 1. In **Compute Engine**, click the SSH drop-down menu next to your VM, and select **Open in browser window**:
 
-![fig16](figures/16.png)
+![fig16](figures/16.webp)
 
 2. This opens a browser window. First, click the **Authorize** button:
 
@@ -53,7 +53,7 @@ After creating the VM, connect to it as follows:
 
 3. You will then see the terminal of your VM:
 
-![fig18](figures/18.png)
+![fig18](figures/18.webp)
 
 ### Installing dependencies and deploying an app
 Once the connection is established, you can install the required dependencies (.NET SDK, Aspire workload, and Git), fetch the application code, and deploy it.
@@ -100,7 +100,7 @@ dotnet run --project NetAspire.Arm.AppHost
 ```
 
 You will see output similar to this:
-![fig19](figures/19.png)
+![fig19](figures/19.webp)
 
 ### Making your application public
 

@@ -15,8 +15,13 @@ prerequisites:
 
 author: Bolt Liu
 
-skilllevels: introductory
+skilllevels: Introductory
 subjects: Databases
+cloud_service_providers:
+  - AWS
+  - Microsoft Azure
+  - Google Cloud
+  - Oracle
 armips:
     - Neoverse
 operatingsystems:
@@ -41,7 +46,7 @@ further_reading:
         type: documentation
     - resource:
         title: Learn how to deploy MySQL
-        link: https://learn.arm.com/learning-paths/servers-and-cloud-computing/mysql/
+        link: /learning-paths/servers-and-cloud-computing/mysql/
         type: documentation
 
 

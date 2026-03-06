@@ -41,7 +41,7 @@ The marketing information provides more details about the similarities and diffe
 
 - [Arm Virtual Hardware Corstone and CPUs](#aws) AWS AMI (Amazon Machine Image) provides Virtual Hardware Targets (`VHT`) in a cloud instance (virtual machine). The AMI is available in the [AWS marketplace](https://aws.amazon.com/marketplace/pp/prodview-urbpq7yo5va7g/).
 
-- [Arm Virtual Hardware Third-Party Hardware](#3rdparty) uses hypervisor technology to model real hardware provided by Arm’s partners. It also offers FVPs as part of the cloud service.
+- [Arm Virtual Hardware Third-Party Hardware](#3rdparty) uses hypervisor technology to model real hardware provided by Arm's partners. It also offers FVPs as part of the cloud service.
 
 #### Arm Virtual Hardware Corstone and CPUs (AWS AMI) {#aws}
 
@@ -99,8 +99,6 @@ If you are in the console and can see the FVPs, you are ready for ML application
 ## FVP configuration options
 
 These virtual platforms have some options to help you evaluate different configurations.
-
-The [AVH simulation model documentation](https://arm-software.github.io/AVH/main/simulation/html/Using.html) has many good tips.
 
 ### Number of MACs
 

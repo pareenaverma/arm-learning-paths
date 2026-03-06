@@ -8,16 +8,16 @@ layout: learningpathall
 
 ## Overview
 
-In 2023, Arm developed a demo to showcase the new frontier of next-generation graphics technologies of the **Immortalis** GPU via the Unreal Lumen rendering system. If you are not familiar with Lumen and global illumination, please review this [learning path](/learning-paths/mobile-graphics-and-gaming/how-to-enable-hwrt-on-lumen-for-android-devices/) before proceeding.
+In 2023, Arm developed a demo to showcase the new frontier of next-generation graphics technologies of the **Immortalis** GPU via the Unreal Lumen rendering system. If you are not familiar with Lumen and global illumination, please review [How to Enable Hardware Ray Tracing on Lumen for Android Devices](/learning-paths/mobile-graphics-and-gaming/how-to-enable-hwrt-on-lumen-for-android-devices/) before proceeding.
 
 The demo is named **Steel Arms**. Created with Unreal Engine 5.3, Steel Arms brings desktop-level Bloom, Motion Blur, and Depth of Field (DOF) effects, alongside Physically Based Rendering (PBR), to smartphones.
 
 The following screenshots are from scenes in **Steel Arms** which is powered by Unreal Lumen. Several optimization tips and techniques were used in the development of **Steel Arms** for achieving the best performance with Lumen. This learning path will start with an introduction to ray tracing and then cover the best practices for hardware ray tracing in Lumen.
 
 
-![](images/Garage.png)
+![](images/garage.webp)
 
-![](images/Garage2.png)
+![](images/garage2.webp)
 
 
 ## What is Ray Tracing?

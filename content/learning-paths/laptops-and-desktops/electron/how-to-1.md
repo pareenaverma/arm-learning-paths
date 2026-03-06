@@ -15,10 +15,10 @@ In this learning path you will learn how to create a Desktop application for Win
 
 Here, you will use the posts endpoint of the `JSONPlaceholder`. This endpoint enables you to retrieve the list of hypothetical posts.
 
-You can find the the complete code used in the learning path [here](https://github.com/dawidborycki/electron-sample-app.git)
+You can find the [complete code on GitHub](https://github.com/dawidborycki/electron-sample-app.git).
 
 ## Before you begin
-Before you begin, install Node.JS for Arm64. You can find the installer [here](https://nodejs.org/en/download). In this learning path, you will use version 20.10.0. The installation process is automatic. However, make sure to check the "Automatically install the necessary tools" checkbox so that it automatically installs the build tools for the NPM packages:
+Before you begin, install Node.JS for Arm64. You can find the [Node.js installer](https://nodejs.org/en/download). In this learning path, you will use version 20.10.0. The installation process is automatic. However, make sure to check the "Automatically install the necessary tools" checkbox so that it automatically installs the build tools for the NPM packages:
 
 ![fig1](figures/01.png)
 
@@ -218,7 +218,7 @@ npm start
 
 The application window appears. Then click the Fetch data button and you will see the list of posts:
 
-![fig2](figures/02.png)
+![fig2](figures/02.webp)
 
 ## Styling an application
 The application works fine. However, it uses default styles and does not look very pretty. To change this you can use cascading style sheets (CSS) as per web applications. To style the application, proceed as follows:
@@ -302,7 +302,7 @@ body {
 
 After the application launches, click the **Fetch data** button and you will see the following result:
 
-![fig3](figures/03.png)
+![fig3](figures/03.webp)
 
 ## Checkpoint
 You now have the application up and running. By default, it runs using the Arm64 architecture because we used Node.js for Arm64. To confirm this, open the Task Manager, click the Details tab and look for **electron.exe** processes:

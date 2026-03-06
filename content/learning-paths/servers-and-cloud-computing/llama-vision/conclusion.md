@@ -35,8 +35,8 @@ For this to work, you must ensure that the `allow-my-ip` tag is present on your 
 Upload an image and enter your prompt in the UI to generate a response.
 
 You should see the LLM generating a response based on the prompt, using the image as context as shown below:
-![browser_output](browser_output.png)
+![browser_output](browser_output.webp)
 
 ## Further Interaction and Custom Applications
 
-You can continue to experiment with different images and prompts to observe the response of Vision model on Arm-based CPUs. This setup demonstrates how you can create various applications and configure your vision-based LLMs. This Learning Path serves as a guide and example to showcase the LLM inference of vision models on Arm CPUs, highlighting the optimized inference on CPUs.
+You can continue experimenting with different images and prompts to observe how the Vision model responds on Arm-based CPUs. This setup demonstrates how you can create various applications and configure your vision-based LLMs. This Learning Path serves as a guide and example to showcase the LLM inference of vision models on Arm CPUs, highlighting the optimized inference on CPUs.

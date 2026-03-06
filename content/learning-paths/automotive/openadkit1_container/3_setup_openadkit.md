@@ -15,7 +15,7 @@ The example has been tested on [AWS EC2](https://aws.amazon.com/ec2/) and an [Am
 
 ## Installation
 
-You need Docker to run Open AD Kit. Refer to the [Docker install guide](https://learn.arm.com/install-guides/docker/) to learn how to install Docker on an Arm platform.
+You need Docker to run Open AD Kit. Refer to the [Docker install guide](/install-guides/docker/) to learn how to install Docker on an Arm platform.
 
 First, verify Docker is installed on your development computer by running:
 
@@ -32,7 +32,7 @@ Docker version 28.0.4, build b8034c0
 Clone the demo repository using:
 
 ```bash
-git clone https://github.com/autowarefoundation/openadkit_demo.autoware.git
+git clone https://github.com/odincodeshen/openadkit_demo.autoware.git
 ```
 
 The project is containerized in three Docker images, so you do not need to install any additional software.

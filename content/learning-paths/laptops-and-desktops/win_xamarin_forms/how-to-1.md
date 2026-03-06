@@ -11,7 +11,7 @@ Xamarin Forms is a cross-platform UI toolkit that allows developers to create na
 
 In this learning path, you will learn how to use Xamarin Forms to create a cross-platform application. Then, you will launch this application on Windows on Arm using x64 and Arm64 build configurations and compare the performance. By doing so, we will be able to see how Arm64 can accelerate Xamarin Forms applications. 
 
-You can find the complete project code used in this learning path [here](https://github.com/dawidborycki/Arm64.MobileApp.XamarinForms.git).
+You can find the [complete project code on GitHub](https://github.com/dawidborycki/Arm64.MobileApp.XamarinForms.git).
 
 ## Before you begin
 Before you begin the implementation, install Visual Studio 2022 with the following workloads:
@@ -21,11 +21,11 @@ Before you begin the implementation, install Visual Studio 2022 with the followi
 ## Create the project
 Open Visual Studio and click 'Create a new project'. 
 
-![fig1](figures/01.png)
+![fig1](figures/01.webp)
 
 In the next window, search for the 'Mobile App (Xamarin.Forms)' template. 
 
-![fig2](figures/02.png)
+![fig2](figures/02.webp)
 
 This will open the 'Configure your new project' view, in which you should configure the project as follows (refer to the figure below):
 
@@ -69,7 +69,7 @@ Before starting the UI design, install the `Syncfusion.SfChart.WPF` NuGet packag
 2. In Solution Explorer, right-click on 'Dependencies' under the Arm64.MobileApp.XamarinForms project. From the context menu, select 'Manage NuGet Packages...' to open the NuGet Package Manager.
 3. In the NuGet Package Manager, search for 'Sf chart.' Then select 'Syncfusion.SfChart.WPF' from the results and click the 'Install' button. Refer to the figure below for guidance:
 
-![fig7](figures/07.png)
+![fig7](figures/07.webp)
 
 4. A 'Preview Changes' window will appear. Click the 'Apply' button to confirm and proceed with the changes to the solution. The installation of the NuGet package will complete.
 5. Finally, in the 'License Acceptance' window that appears, click the 'I Accept' button to agree to the terms and complete the installation process.
@@ -230,7 +230,7 @@ protected override void OnLaunched(LaunchActivatedEventArgs e)
 ## Helpers
 You will now supplement the shared project with two helper classes:
 
-1. **MatrixHelper**: this class implements matrix multiplication based on the mathematical formula detailed [here](https://en.wikipedia.org/wiki/Matrix_multiplication).
+1. **MatrixHelper**: this class implements matrix multiplication based on the [mathematical formula for matrix multiplication](https://en.wikipedia.org/wiki/Matrix_multiplication).
 2. **PerformanceHelper**: this class provides functionality to measure code execution time.
 
 To implement these classes, follow these steps:

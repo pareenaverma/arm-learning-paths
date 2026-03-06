@@ -1,9 +1,5 @@
 ---
-title: Deploy DeepSeek-R1 models on Arm servers
-
-draft: true
-cascade:
-    draft: true
+title: Deploy DeepSeek-R1 on Arm Servers with llama.cpp
 
 minutes_to_complete: 30
 
@@ -23,13 +19,18 @@ author:
 ### Tags
 skilllevels: Introductory
 subjects: ML
+cloud_service_providers:
+  - AWS
+  - Microsoft Azure
+  - Google Cloud
+  - Oracle
 armips:
     - Neoverse
 operatingsystems:
     - Linux
 tools_software_languages:
     - LLM
-    - GenAI
+    - Generative AI
     - Python
 
 

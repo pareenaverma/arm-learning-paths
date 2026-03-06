@@ -27,7 +27,7 @@ Follow the instructions below to install and use PyTorch on Arm Linux.
 Anaconda provides another way to install PyTorch. See the [Anaconda install guide](/install-guides/anaconda/) to find out how to use PyTorch from Anaconda. The Anaconda version of PyTorch might be older than the version available using `pip`.
 {{% /notice %}}
 
-## Before you begin
+## What do I need before installing PyTorch?
 
 Confirm that you are using an Arm Linux system by running:
 
@@ -49,6 +49,7 @@ PyTorch requires Python 3, and this can be installed with `pip`.
 For Ubuntu, run:
 
 ```bash
+sudo apt update
 sudo apt install python-is-python3 python3-pip python3-venv -y
 ```
 
@@ -59,7 +60,7 @@ sudo dnf install python-pip -y
 alias python=python3
 ```
 
-## Download and install PyTorch
+## How do I download and install PyTorch?
 
 It is recommended that you install PyTorch in your own Python virtual environment. Set up your virtual environment:
 
@@ -71,10 +72,10 @@ source venv/bin/activate
  In your active virtual environment, install PyTorch:
 
 ```bash
-sudo pip install torch torchvision torchaudio
+pip install torch torchvision torchaudio
 ```
 
-## Get started
+## How do I get started with PyTorch?
 
 Test PyTorch:
 

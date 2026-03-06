@@ -14,12 +14,16 @@ prerequisites:
     - Any [Arm-based instance](/learning-paths/servers-and-cloud-computing/csp/) from a cloud service provider (CSP), or an on-premise Arm server with at least 400GB of RAM and 800 GB of disk space.
 
 author: 
+    - Phalani Paladugu
     - Annie Tallund
     - Pareena Verma
 
 ### Tags
 skilllevels: Introductory
 subjects: Performance and Architecture
+cloud_service_providers:
+  - AWS
+  - Google Cloud
 armips:
     - Neoverse
 tools_software_languages:
@@ -28,7 +32,6 @@ tools_software_languages:
     - Google Cloud
 operatingsystems:
     - Linux
-cloud_service_providers: AWS
 
 further_reading:
     - resource:

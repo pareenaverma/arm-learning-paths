@@ -50,7 +50,7 @@ further_reading:
         type: documentation
     - resource:
         title: The next chapter for Arm RAN Acceleration Library Open-sourcing the code base & accelerating adoption
-        link: https://community.arm.com/arm-community-blogs/b/infrastructure-solutions-blog/posts/arm-ral-is-now-open-source
+        link: https://developer.arm.com/community/arm-community-blogs/b/servers-and-cloud-computing-blog/posts/arm-ral-is-now-open-source
         type: blog
 
 
@@ -59,5 +59,4 @@ further_reading:
 weight: 1                       # _index.md always has weight of 1 to order correctly
 layout: "learningpathall"       # All files under learning paths have this same wrapper
 learning_path_main_page: "yes"  # This should be surfaced when looking for related content. Only set for _index.md of learning path content.
-layout: learningpathall
 ---

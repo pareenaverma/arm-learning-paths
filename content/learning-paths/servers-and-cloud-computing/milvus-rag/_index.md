@@ -19,12 +19,19 @@ author: Chen Zhang
 ### Tags
 skilllevels: Introductory
 subjects: ML
+cloud_service_providers:
+  - AWS
+  - Microsoft Azure
+  - Google Cloud
+  - Oracle
 armips:
     - Neoverse
 tools_software_languages:
     - Python
-    - GenAI
+    - Generative AI
     - RAG
+    - Hugging Face
+
 operatingsystems:
     - Linux
 

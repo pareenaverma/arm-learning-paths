@@ -31,10 +31,12 @@ subjects: ML
 armips:
     - Cortex-A
 tools_software_languages:
-    - Mobile
     - Java
-    - C++
+    - CPP
     - Python
+    - Hugging Face
+    - ExecuTorch
+
 operatingsystems:
     - macOS
     - Android

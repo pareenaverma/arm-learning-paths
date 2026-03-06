@@ -20,7 +20,7 @@ You were probably expecting an Arduino board, rather than a Raspberry Pi board b
 
 For interacting with the physical world you can use two cheap commodity components. 
 
-![PIR Sensor](_images/PIR-Sensor-Pinout.png)
+![PIR Sensor](_images/pir-sensor-pinout.png)
 
 First a PIR motion sensor. This sensor reacts to infrared photons emitted by a warm moving object, like a person or animal. The interface is simple, it has one pin for input voltage, one pin for ground to complete the circuit, and a third pin that will have the same voltage as the input pin when motion is detected, and the same voltage as the ground pin when it isn't.
 
@@ -29,7 +29,7 @@ First a PIR motion sensor. This sensor reacts to infrared photons emitted by a w
 
 Second, a very simple electric buzzer. You could get fancy with one of these and make it play different sounds with something called Pulse Width Modulation (PWM) but, for simplicity, you can give it a constant voltage which will result in a high-pitched beeping noise.
 
-![Breadboard](_images/Breadboard.jpeg)
+![Breadboard](_images/breadboard.jpeg)
 
 Finally, you can use a breadboard to connect the components together without having to do any soldering.
 
@@ -39,25 +39,25 @@ If you're not familiar with a breadboard, the image above shows you how all of t
 
 ### Step 1: Seat your Raspberry Pi
 
-![RaspberryPi Pico](_images/pico_on_breadboard.png)
+![RaspberryPi Pico](_images/pico_on_breadboard.webp)
 
 Seat your Raspberry Pi Pico on the breadboard so that its rows of pins sit on either side of the center divider. Make sure that it's firmly pressed all the way down but be careful not to bend any of the pins.
 
 ### Step 2: PIR ground
 
-![PIR ground](_images/pir_sensor_1.png)
+![PIR ground](_images/pir_sensor_1.webp)
 
 Using a black jumper wire, connect the ground pin of your PIR sensor to pin #38 on your Pico. This pin is a ground voltage pin on the Pico.
 
 ### Step 3: PIR input voltage
 
-![PIR voltage](_images/pir_sensor_2.png)
+![PIR voltage](_images/pir_sensor_2.webp)
 
 Using a red wire, connect the input voltage pin of your PIR sensor to pin #36 on your Pico. This pin is a 3.3 volt pin on the Pico and will supply power to your PIR sensor.
 
 ### Step 4: PIR data
 
-![PIR data](_images/pir_sensor_3.png)
+![PIR data](_images/pir_sensor_3.webp)
 
 The last step to connecting the PIR sensor is to connect the middle data pin to pin #34 on your Pico. This is a GPIO pin that you can use to either read or write data. 
 
@@ -65,13 +65,13 @@ Note that this is GPIO #28, even though it's physical pin #34. Physical pin numb
 
 ### Step 5: Buzzer ground
 
-![Buzzer ground](_images/piezo_1.png)
+![Buzzer ground](_images/piezo_1.webp)
 
 Next, it's time to connect the buzzer. Start by connecting the buzzer's ground pin to pin #23 on your Pico. This is another ground pin that is build into your board.
 
 ### Step 6: Buzzer input
 
-![Buzzer input](_images/piezo_2.png)
+![Buzzer input](_images/piezo_2.webp)
 
 Then, connect the buzzer's input pin to pin #25 on your Pico. This is another GPIO pin, this time GPIO #19.
 

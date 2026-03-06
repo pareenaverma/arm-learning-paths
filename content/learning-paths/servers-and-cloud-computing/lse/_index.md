@@ -17,6 +17,11 @@ author: Jason Andrews
 ### Tags
 skilllevels: Introductory
 subjects: Performance and Architecture
+cloud_service_providers:
+  - AWS
+  - Microsoft Azure
+  - Google Cloud
+  - Oracle
 armips:
     - Neoverse 
 operatingsystems:
@@ -37,7 +42,7 @@ further_reading:
         type: blog
     - resource:
         title: Learn about glibc with Large System Extensions (LSE) for performance improvement
-        link: https://learn.arm.com/learning-paths/servers-and-cloud-computing/glibc-with-lse/
+        link: /learning-paths/servers-and-cloud-computing/glibc-with-lse/
         type: website
 
 

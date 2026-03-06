@@ -22,7 +22,6 @@ armips:
 operatingsystems:
     - Baremetal
 tools_software_languages:
-    - Coding
     - Arm Virtual Hardware
     - GitHub
 
@@ -30,7 +29,6 @@ tools_software_languages:
 shared_path: true
 shared_between:
     - embedded-and-microcontrollers
-    - iot
 
 further_reading:
     - resource:

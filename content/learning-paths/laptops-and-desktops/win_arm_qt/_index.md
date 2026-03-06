@@ -23,7 +23,8 @@ armips:
 operatingsystems:
     - Windows
 tools_software_languages:
-    - C/C++
+    - C
+    - CPP
     - Qt    
 
 further_reading:

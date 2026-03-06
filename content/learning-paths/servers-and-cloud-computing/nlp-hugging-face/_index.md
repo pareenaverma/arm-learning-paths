@@ -17,6 +17,11 @@ author: Pareena Verma
 ### Tags
 skilllevels: Introductory
 subjects: ML
+cloud_service_providers:
+  - AWS
+  - Microsoft Azure
+  - Google Cloud
+  - Oracle
 armips:
     - Neoverse 
 operatingsystems:
@@ -24,6 +29,7 @@ operatingsystems:
 tools_software_languages:
     - Python
     - PyTorch
+    - Hugging Face
     
 further_reading:
     - resource:

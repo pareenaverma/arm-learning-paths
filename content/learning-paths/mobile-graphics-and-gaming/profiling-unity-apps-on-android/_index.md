@@ -5,7 +5,7 @@ minutes_to_complete: 40
 
 who_is_this_for: Unity developers wanting to analyze the performance of their apps on Android devices
 
-learning_objectives: 
+learning_objectives:
     - Deploy to Android
     - Profile code running on an Android device
     - Analyze performance data
@@ -14,12 +14,12 @@ prerequisites:
     - Recent Android device, such as a mobile phone or tablet
     - Desktop computer capable of running Unity
     - Basic knowledge of Unity and programming concepts
-    - Learning path [Get started with Unity on Android](/learning-paths/mobile-graphics-and-gaming/get-started-with-unity-on-android)
+    - The setup described in the Learning Path [Get started with Unity on Android](/learning-paths/mobile-graphics-and-gaming/get-started-with-unity-on-android)
 
-author: Arm
+author: Joshua Marshall-Law
 
 ### Tags
-skilllevels: Intermediate
+skilllevels: Introductory
 subjects: Performance and Architecture
 armips:
     - armv8
@@ -29,7 +29,6 @@ armips:
     - arm architecture
 tools_software_languages:
     - Unity
-    - Mobile
     - C#
 operatingsystems:
     - Android

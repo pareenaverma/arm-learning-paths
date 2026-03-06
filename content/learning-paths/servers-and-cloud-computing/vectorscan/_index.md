@@ -19,6 +19,11 @@ author: Pareena Verma
 ### Tags
 skilllevels: Introductory
 subjects: Libraries
+cloud_service_providers:
+  - AWS
+  - Microsoft Azure
+  - Google Cloud
+  - Oracle
 armips:
     - Neoverse
 tools_software_languages:
@@ -38,7 +43,7 @@ further_reading:
         type: documentation
     - resource:
         title: Accelerate Deep Packet Inspection with Neon on Arm
-        link: https://community.arm.com/arm-community-blogs/b/tools-software-ides-blog/posts/accelerating-deep-packet-inspection-with-neon-on-arm-neoverse
+        link: https://developer.arm.com/community/arm-community-blogs/b/servers-and-cloud-computing-blog/posts/accelerating-deep-packet-inspection-with-neon-on-arm-neoverse
         type: blog
 
 

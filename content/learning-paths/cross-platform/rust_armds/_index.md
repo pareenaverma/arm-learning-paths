@@ -26,13 +26,11 @@ armips:
 operatingsystems:
     - Baremetal
 tools_software_languages:
-    - Coding
     - IP Explorer
 
 ### Cross-platform metadata only
 shared_path: true
 shared_between:
-    - embedded-and-microcontrollers
     - embedded-and-microcontrollers
 
 further_reading:

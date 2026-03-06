@@ -17,7 +17,7 @@ WinUI 3 is an open-source project, offering backwards compatibility with existin
 
 In this learning path you will implement a Win UI 3 application, which will perform square matrix multiplication. The idea is to reproduce the same functionality used in [Windows Forms learning path](/learning-paths/laptops-and-desktops/win_forms). You will also be able to measure performance improvements on Arm64 architecture.
 
-You can find the complete code used in this learning path [here](https://github.com/dawidborycki/Arm64.WinUIApp.git).
+You can find the [complete code on GitHub](https://github.com/dawidborycki/Arm64.WinUIApp.git).
 
 ## Before you begin
 Before you begin the implementation, install Visual Studio 2022 with the following workloads:
@@ -25,7 +25,7 @@ Before you begin the implementation, install Visual Studio 2022 with the followi
 2. Universal Windows Platform development
 3. After selecting these workloads, expand the .NET desktop development group under the Installation details and ensure that the 'Windows App SDK C# Templates' option is selected.
 
-![fig1](figures/01.png)
+![fig1](figures/01.webp)
 
 Then, click the 'Individual components' tab and check '.NET 6.0 Runtime (Long Term Support)'.
 
@@ -34,11 +34,11 @@ Then, click the 'Individual components' tab and check '.NET 6.0 Runtime (Long Te
 ## Create the project
 Open Visual Studio and click 'Create a new project'.
 
-![fig3](figures/03.png)
+![fig3](figures/03.webp)
 
 In the next window, search for the 'Blank App, Packaged (WinUI 3 in Desktop)' template. Select this template and click the 'Next' button.
 
-![fig4](figures/04.png)
+![fig4](figures/04.webp)
 
 This action opens the 'Configure your new project' window. Here, you should:
 

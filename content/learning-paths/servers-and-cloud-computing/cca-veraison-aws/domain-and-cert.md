@@ -31,7 +31,7 @@ If you have an existing domain, you can transfer it into Route53 instead of regi
 
 ![Register Domain](./create-domain.png)
 
-Route53 checks your domain name to make sure it’s unique on the internet. Provided that there isn't a clash, Route53 gives you the option of registering your chosen domain name, or some alternatives. For example, it might suggest you could use `example-veraison.net` or `example-veraison.org`.
+Route53 checks your domain name to make sure it's unique on the internet. Provided that there isn't a clash, Route53 gives you the option of registering your chosen domain name, or some alternatives. For example, it might suggest you could use `example-veraison.net` or `example-veraison.org`.
 
 Route53 charges an annual fee for domain registration, which varies depending on your chosen name. Choose the name that you would like to use, and proceed to complete the registration process using the on-screen instructions in your browser.
 
@@ -63,7 +63,7 @@ Use the **Add another name to this certificate** button to create the secondary 
 
 For the validation method, you should use **DNS validation**, which is the recommended default. You can also use the default **RSA 2048** for the certificate key algorithm as shown below.
 
-![Certificate Validation and Key Algorithm](./cert-validation-and-algorithm.png)
+![Certificate Validation and Key Algorithm](./cert-validation-and-algorithm.webp)
 
 Now click **Request** to request the certificate from the Certificate Manager.
 

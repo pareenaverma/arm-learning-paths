@@ -23,6 +23,11 @@ layout: learningpathall
 learning_path_main_page: 'yes'
 skilllevels: Introductory
 subjects: Databases
+cloud_service_providers:
+  - AWS
+  - Microsoft Azure
+  - Google Cloud
+  - Oracle
 test_maintenance: false
 tools_software_languages:
 - MongoDB
@@ -45,7 +50,7 @@ further_reading:
         type: documentation
     - resource:
         title: Compare performance of MongoDB on Arm vs Intel
-        link: https://community.arm.com/arm-community-blogs/b/operating-systems-blog/posts/mongodb-performance-on-aws-with-the-arm-graviton2
+        link: https://developer.arm.com/community/arm-community-blogs/b/servers-and-cloud-computing-blog/posts/mongodb-performance-on-aws-with-the-arm-graviton2
         type: blog
 
 

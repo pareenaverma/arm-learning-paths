@@ -1,5 +1,8 @@
 name: Test Learning Path
 on: pull_request
+env:
+  HUGO_VERSION: 0.130.0
+
 jobs:
   Test-Pull-Request:
     runs-on: ubuntu-24.04-arm
@@ -8,23 +11,27 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ steps.vars.outputs.branch-name }}
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: ${{ env.HUGO_VERSION }}
+          extended: true
       - name: Run hugo command to test site builds
         run: |
-          sudo apt-get install -y hugo
           hugo
       - name: Get all changed markdown files
         id: changed-markdown-files
         uses: tj-actions/changed-files@v46
         with:
           files: |
-             **.md
+             content/**/**.md
       - name: Check for capital letters or spaces in content directory
         run: |
           echo "Checking for capital letters or spaces in content directory paths (excluding file extensions)..."
 
           tmpfile=$(mktemp)
 
-          git diff --name-only origin/${{ github.base_ref }}...HEAD |
+          git diff --name-only --diff-filter=d origin/${{ github.base_ref }}...HEAD |
             grep '^content/' |
             while read -r path; do
               name=$(basename "$path")
@@ -51,6 +58,11 @@ jobs:
       - name: Install dependencies
         if: steps.changed-markdown-files.outputs.any_changed == 'true'
         run: pip install -r tools/requirements.txt
+      - name: Validate _index.md files
+        if: steps.changed-markdown-files.outputs.any_changed == 'true'
+        run: |
+          echo "Checking YAML fields for changed learning paths..."
+          python3 tools/verify_index_fields.py ${{ steps.changed-markdown-files.outputs.all_changed_files }}
       - name: Run test suite for all changed .md files
         id: run-suite
         if: steps.changed-markdown-files.outputs.any_changed == 'true'
@@ -79,10 +91,3 @@ jobs:
       - name: Check if maintenance is turned off
         if: env.MAINTENANCE == 'off' && success()
         run: echo "Maintenance is turned off for one or more files"
-      # Only upload artifact if maintenance is on
-      - name: Upload stats artifact
-        uses: actions/upload-artifact@v4
-        if: success() && env.MAINTENANCE == 'on'
-        with:
-          name: stats_current_test_info
-          path: data/stats_current_test_info.yml

@@ -23,7 +23,14 @@ adb push example.png /data/local/tmp/
 
 ## Build Binaries for Command-line Inference
 
-Navigate to the MNN project that you cloned in the previous section. 
+Run the following commands to clone the MNN repository and checkout the source tree:
+
+```bash
+cd $HOME
+git clone https://github.com/alibaba/MNN.git
+cd MNN
+git checkout fa3b2161a9b38ac1e7dc46bb20259bd5eb240031
+```
 
 Create a build directory and run the build script. 
 
@@ -33,10 +40,9 @@ The first time that you do this, build the binaries with the `-DMNN_KLEIDIAI` fl
 cd $HOME/MNN/project/android
 mkdir build_64 && cd build_64
 
-../build_64.sh "-DMNN_LOW_MEMORY=true -DLLM_SUPPORT_VISION=true -DMNN_KLEIDIAI=FALSE  \
-  -DMNN_CPU_WEIGHT_DEQUANT_GEMM=true -DMNN_BUILD_LLM=true \
-  -DMNN_SUPPORT_TRANSFORMER_FUSE=true -DMNN_ARM82=true -DMNN_OPENCL=true \
-  -DMNN_USE_LOGCAT=true -DMNN_IMGCODECS=true -DMNN_BUILD_OPENCV=true"
+../build_64.sh "-DMNN_BUILD_LLM=true -DMNN_BUILD_LLM_OMNI=ON -DLLM_SUPPORT_VISION=true \
+-DMNN_BUILD_OPENCV=true -DMNN_IMGCODECS=true -DMNN_LOW_MEMORY=true \
+-DMNN_CPU_WEIGHT_DEQUANT_GEMM=true -DMNN_BUILD_LLM=true -DMNN_SUPPORT_TRANSFORMER_FUSE=true"
 ```
 {{% notice Note %}}
 If your NDK toolchain isn't set up correctly, you might run into issues with the above script. Make a note of where the NDK was installed - this will be a directory named after the version you downloaded earlier. Try exporting the following environment variables before re-running `build_64.sh`:
@@ -70,7 +76,7 @@ echo "<img>./example.png</img>Describe the content of the image." > prompt
 Finally, run an inference on the model with the following command:
 
 ```bash
-./llm_demo models/Qwen-VL-2B-convert-4bit-per_channel/config.json prompt
+./llm_demo models/Qwen2.5-VL-3B-Instruct-MNN/config.json prompt
 ```
 
 If the launch is successful, you should see the following output, with the performance benchmark at the end:
@@ -95,14 +101,19 @@ prefill speed = 192.28 tok/s
 
 ## Enable KleidiAI and Re-run Inference
 
-The next step is to re-generate the binaries with KleidiAI activated. This is done by updating the flag `-DMNN_KLEIDIAI` to `TRUE`. 
+The next step is to re-generate the binaries with KleidiAI activated. This is done by inserting a hint into the code. 
+
+From the `MNN` directory, run:
+```bash
+sed -i '/void Llm::setRuntimeHint(std::shared_ptr<Express::Executor::RuntimeManager> &rtg) {/a\
+    rtg->setHint(MNN::Interpreter::CPU_ENABLE_KLEIDIAI, 1);' transformers/llm/engine/src/llm.cpp
+```
 
 From the `build_64` directory, run:
 ```bash
-../build_64.sh "-DMNN_LOW_MEMORY=true -DLLM_SUPPORT_VISION=true -DMNN_KLEIDIAI=TRUE \
--DMNN_CPU_WEIGHT_DEQUANT_GEMM=true -DMNN_BUILD_LLM=true \
--DMNN_SUPPORT_TRANSFORMER_FUSE=true -DMNN_ARM82=true -DMNN_OPENCL=true \
--DMNN_USE_LOGCAT=true -DMNN_IMGCODECS=true -DMNN_BUILD_OPENCV=true"
+../build_64.sh "-DMNN_BUILD_LLM=true -DMNN_BUILD_LLM_OMNI=ON -DLLM_SUPPORT_VISION=true \
+-DMNN_BUILD_OPENCV=true -DMNN_IMGCODECS=true -DMNN_LOW_MEMORY=true \
+-DMNN_CPU_WEIGHT_DEQUANT_GEMM=true -DMNN_BUILD_LLM=true -DMNN_SUPPORT_TRANSFORMER_FUSE=true"
 ```
 ## Update Files on the Device
 
@@ -120,7 +131,7 @@ With the new ADB shell, run the following commands:
 cd /data/local/tmp/
 chmod +x llm_demo
 export LD_LIBRARY_PATH=$PWD
-./llm_demo models/Qwen-VL-2B-convert-4bit-per_channel/config.json prompt
+./llm_demo models/Qwen2.5-VL-3B-Instruct-MNN/config.json prompt
 ```
 ## Benchmark Results
 

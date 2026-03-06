@@ -9,87 +9,105 @@ key_ip:
 - Ethos-U
 maintopic: true
 operatingsystems_filter:
-- Android: 1
-- Baremetal: 29
-- Linux: 26
-- macOS: 6
-- RTOS: 9
-- Windows: 4
+- Android: 2
+- Baremetal: 31
+- Linux: 38
+- macOS: 8
+- RTOS: 11
+- Windows: 6
 subjects_filter:
-- CI-CD: 5
+- CI-CD: 7
 - Containers and Virtualization: 6
-- Embedded Linux: 3
+- Embedded Linux: 6
 - Libraries: 3
-- ML: 12
-- Performance and Architecture: 21
-- RTOS Fundamentals: 4
+- ML: 19
+- Performance and Architecture: 23
+- RTOS Fundamentals: 5
 - Security: 2
 - Virtual Hardware: 2
-subtitle: Learn best practices for microcontroller development
+subtitle: Learn best practices for IoT, embedded, and microcontroller development.
 title: Embedded and Microcontrollers
 tools_software_languages_filter:
-- Arduino: 1
-- Arm Compiler for Embedded: 7
+- AI: 1
+- Arduino: 2
+- Arm Compiler for Embedded: 8
 - Arm Compiler for Linux: 1
-- Arm Compute Library: 1
-- Arm Development Studio: 7
+- Arm Compute Library: 2
+- Arm Development Studio: 8
 - Arm Fast Models: 4
-- Arm Virtual Hardware: 10
-- AVH: 1
-- C: 2
-- C/C++: 1
+- Arm Performance Studio: 1
+- Arm Streamline: 1
+- Arm Virtual Hardware: 16
+- Assembly: 1
+- AWS IoT Greengrass: 1
+- Azure: 1
+- balenaCloud: 1
+- BalenaOS: 1
+- C: 5
 - ChatGPT: 1
 - Clang: 1
 - CMSIS: 4
 - CMSIS-DSP: 1
 - CMSIS-Toolbox: 3
 - CNN: 1
-- Coding: 26
+- Computer Vision: 1
 - Containerd: 1
+- CPP: 1
 - DetectNet: 1
-- Docker: 9
+- Docker: 11
 - DSTREAM: 2
-- ExecuTorch: 2
-- Fixed Virtual Platform: 9
+- Edge AI: 3
+- Edge Impulse: 2
+- ExecuTorch: 5
+- FastAPI: 1
 - FPGA: 1
 - Fusion 360: 1
-- FVP: 1
-- GCC: 8
-- GenAI: 2
-- GitHub: 3
-- GitLab: 1
+- FVP: 11
+- GCC: 9
+- GenAI: 1
+- Generative AI: 2
+- GitHub: 4
+- GitLab: 2
+- gpiozero: 1
 - Himax SDK: 1
+- Hugging Face: 3
 - IP Explorer: 4
 - Jupyter Notebook: 1
 - K3s: 1
-- Keil: 5
-- Keil MDK: 3
+- Keil MDK: 7
+- Keil RTX RTOS: 2
+- Keil Studio Cloud: 1
 - Kubernetes: 1
-- LLM: 2
-- MDK: 1
+- lgpio: 1
+- Linux kernel: 1
+- LLM: 3
+- Matter: 1
+- MCP: 1
 - MPS3: 1
 - MXNet: 1
-- Neon: 1
+- NEON: 1
+- NumPy: 1
+- Ollama: 1
 - Paddle: 1
+- Performance analysis: 1
 - Porcupine: 1
-- Python: 5
-- PyTorch: 2
+- Python: 10
+- PyTorch: 4
 - QEMU: 1
-- Raspberry Pi: 5
+- Raspberry Pi: 9
 - Remote.It: 1
-- RTX: 2
 - Runbook: 4
-- Slicing software: 1
 - STM32: 2
+- systemd: 1
 - TensorFlow: 3
 - TensorRT: 1
-- tinyML: 1
+- tinyML: 2
 - Trusted Firmware: 3
 - TrustZone: 2
 - TVMC: 1
 - vcpkg: 1
-- VS Code: 1
-- Yocto Linux: 1
-- Zephyr: 1
+- Visual Studio Code: 1
+- Yocto Project: 1
+- Zephyr: 2
 weight: 5
 ---

@@ -7,15 +7,21 @@ weight: 8 # 1 is first, 2 is second, etc.
 # Do not modify these elements
 layout: "learningpathall"
 ---
-[Frame Advisor](https://developer.arm.com/Tools%20and%20Software/Frame%20Advisor) is a developer tool designed to offer in-depth frame-based analysis for mobile graphics in Android applications. By capturing the API calls and rendering processes of a specific frame, you can identify potential performance bottlenecks that may be causing slowdowns in your application.
+[Frame Advisor](https://developer.arm.com/Tools%20and%20Software/Frame%20Advisor) offers in-depth frame-based analysis for mobile graphics in Android applications. By capturing the API calls and rendering processes of a specific frame, you can identify potential performance bottlenecks that may be causing slowdowns in your application.
 
 ## Prerequisites
 
-Build your application, and setup the Android device as described in the [Streamline](/learning-paths/mobile-graphics-and-gaming/ams/streamline/) instructions.
+Build your application, and setup the Android device as described in [Setup tasks](/learning-paths/mobile-graphics-and-gaming/ams/setup_tasks/).
 
 ## Connect to the device
 
-1. When Frame Advisor opens, select `New trace` to start a new trace.
+1. Launch the Performance Studio Hub and open Frame Advisor.
+    - On Windows, search for Performance Studio.
+    - On macOS and Linux, open the Performance Studio application file from the install directory.
+
+    ![Performance Studio Hub](images/ps_hub.png)
+
+1. Select `New trace` to start a new trace.
 
    ![Frame Advisor launch screen](images/fa_launch_screen.png)
 
@@ -53,7 +59,7 @@ Explore each frame to evaluate how efficiently they were rendered on the device.
 
 1. Look at the Render Graph to see how the frame was constructed.
 
-    ![Render Graph](images/FA_render_graph_1.1.gif)
+    ![Render Graph](images/fa_render_graph_1.1.gif)
 
     Evaluate the render graph to look for render passes or input or output attachments that aren’t used in the final output, and could be removed, saving processing power and bandwidth.
 

@@ -9,7 +9,7 @@ learning_objectives:
     - Tune PostgreSQL to increase performance
 
 prerequisites:
-    - Bare-metal or cloud [installation of PostgreSQL](/learning-paths//servers-and-cloud-computing/postgresql)
+    - Bare-metal or cloud [installation of PostgreSQL](/learning-paths/servers-and-cloud-computing/postgresql/)
 
 author: Julio Suarez
 
@@ -20,6 +20,11 @@ test_maintenance: true
 ### Tags
 skilllevels: Advanced
 subjects: Databases
+cloud_service_providers:
+  - AWS
+  - Microsoft Azure
+  - Google Cloud
+  - Oracle
 armips:
     - Neoverse
 operatingsystems:

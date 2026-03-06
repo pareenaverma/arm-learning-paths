@@ -20,15 +20,11 @@ weight: 1
 
 It is available for a variety of operating systems and Linux distributions and has multiple ways to install it.
 
-## Before you begin
+## How do I prepare to install the Azure CLI on Ubuntu?
 
-[General installation information](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux?pivots=apt) is available which covers all supported Linux distributions. Starting with version 2.46.0, Azure CLI supports Arm64 Linux distributions. The 'apt' package manager contains both x86_64 and Arm64 packages for the following linux distributions
+[General installation information](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-linux?pivots=apt) is available which covers all supported Linux distributions. Starting with version 2.46.0, Azure CLI supports Arm64 Linux distributions. The 'apt' package manager contains both x86_64 and Arm64 packages for Ubuntu 20.04, Ubuntu 22.04, and Ubuntu 24.04.
 
-```output
-Ubuntu 20.04, Ubuntu 22.04, Ubuntu 24.04
-```
-
-## Install via Azure CLI script
+## How do I install the Azure CLI using the installation script?
 
 Confirm you are using an Arm machine by running:
 
@@ -56,12 +52,12 @@ Execute the following command to verify the Azure CLI is installed correctly
 az version
 ```
 
-You should see an output similar to below
+You should see an output similar to:
 
 ```output
 {
-  "azure-cli": "2.61.0",
-  "azure-cli-core": "2.61.0",
+  "azure-cli": "2.75.0",
+  "azure-cli-core": "2.75.0",
   "azure-cli-telemetry": "1.1.0",
   "extensions": {}
 }
@@ -69,7 +65,7 @@ You should see an output similar to below
 
 If you prefer installing the Azure CLI using Python3, follow the instructions below.
 
-## Download and Install using pip
+## How do I download and install the Azure CLI using pip?
 
 Another way to install Azure CLI for Ubuntu on Arm is to use Python pip.
 
@@ -94,12 +90,12 @@ The pip install updates $HOME/.profile with the path the `az` executable. Check 
 source $HOME/.profile
 az version
 ```
-You should see an output similar to below
+You should see an output similar to:
 
 ```output
 {
-  "azure-cli": "2.61.0",
-  "azure-cli-core": "2.61.0",
+  "azure-cli": "2.75.0",
+  "azure-cli-core": "2.75.0",
   "azure-cli-telemetry": "1.1.0",
   "extensions": {}
 }

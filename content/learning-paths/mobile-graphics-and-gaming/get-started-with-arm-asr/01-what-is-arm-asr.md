@@ -8,7 +8,7 @@ layout: learningpathall
 
 ## Introduction
 
-[Arm&reg; Accuracy Super Resolution™ (Arm ASR)](https://www.arm.com/developer-hub/mobile-graphics-and-gaming/arm-accuracy-super-resolution) is a mobile-optimized temporal upscaling technique derived from [AMD's Fidelity Super Resolution 2 v2.2.2](https://github.com/GPUOpen-LibrariesAndSDKs/FidelityFX-SDK/blob/main/docs/techniques/super-resolution-temporal.md).
+[Arm&reg; Accuracy Super Resolution™ (Arm ASR)](https://www.arm.com/developer-hub/mobile-graphics-and-gaming/arm-accuracy-super-resolution) is a mobile-optimized temporal upscaling technique derived from [AMD's Fidelity Super Resolution 2 v2.2.2](https://github.com/GPUOpen-LibrariesAndSDKs/FidelityFX-SDK/blob/main/docs/samples/super-resolution.md). 
 
 Arm ASR extends this technology with optimizations suited to the resource-constrained environment of mobile gaming.
 
@@ -29,7 +29,7 @@ Arm ASR outperforms spatial upscalers when reconstructing fine details, such as:
 You have control over a range of different settings, including:
 
 - **The upscaling ratio**. For example, a value of 50.0 indicates that the plugin upscales frames by a factor of 2.
-- **Auto-exposure**. Use Arm ASR’s own auto-exposure or use your game engine’s auto-exposure value.
+- **Auto-exposure**. Use Arm ASR's own auto-exposure or use your game engine's auto-exposure value.
 - **Sharpening**. Apply Robust Contrast Adaptive Sharpening (RCAS) filters to enhance output image clarity.
 - **Shader quality presets**. Select from: 1 - Quality, 2 - Balanced, or 3 - Performance presets.
 

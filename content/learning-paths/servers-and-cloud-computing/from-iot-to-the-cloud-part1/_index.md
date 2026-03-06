@@ -18,14 +18,15 @@ prerequisites:
     - 'Visual Studio Code: https://code.visualstudio.com/download' 
     - 'Docker Extension for Visual Studio Code: https://code.visualstudio.com/docs/containers/overview'
     - 'C# Extension for Visual Studio Code: https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp'
-    - 'Install Docker on Arm64: https://learn.arm.com/install-guides/docker/docker-woa/'
+    - '[Install Docker on Arm64](/install-guides/docker/docker-desktop/)'
 
 author: Dawid Borycki
 
 ### Tags
 skilllevels: Introductory
 subjects: Containers and Virtualization
-cloud_service_providers: Microsoft Azure
+cloud_service_providers:
+  - Microsoft Azure
 
 armips:
     - Neoverse
@@ -41,7 +42,7 @@ operatingsystems:
 further_reading:
     - resource:
         title: Terraform on Azure
-        link: https://learn.arm.com/learning-paths/servers-and-cloud-computing/azure-terraform/
+        link: /learning-paths/servers-and-cloud-computing/azure-terraform/
         type: Tutorial
     - resource:
         title: Azure Virtual Machines with Ampere Altra Arm–based processors—generally available

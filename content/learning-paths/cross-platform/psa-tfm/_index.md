@@ -30,14 +30,13 @@ operatingsystems:
     - Linux
 tools_software_languages:
     - Trusted Firmware
-    - Fixed Virtual Platform
+    - FVP
     - GCC
 
 
 ### Cross-platform metadata only
 shared_path: true
 shared_between:
-    - embedded-and-microcontrollers
     - embedded-and-microcontrollers
 
 further_reading:

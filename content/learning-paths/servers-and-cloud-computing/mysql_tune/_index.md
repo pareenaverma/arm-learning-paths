@@ -9,13 +9,17 @@ learning_objectives:
     - Tune MySQL to increase performance
 
 prerequisites:
-    - Bare-metal or cloud [installation of MySQL](/learning-paths//servers-and-cloud-computing/mysql)
+    - Bare-metal or cloud [installation of MySQL](/learning-paths/servers-and-cloud-computing/mysql/)
 
 author: Julio Suarez
 
 skilllevels: Advanced
 subjects: Databases
-cloud_service_providers: Google Cloud
+cloud_service_providers:
+    - AWS
+    - Microsoft Azure
+    - Google Cloud
+    - Oracle
 armips:
     - Neoverse
 operatingsystems:

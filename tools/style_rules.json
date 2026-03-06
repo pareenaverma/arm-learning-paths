@@ -308,5 +308,10 @@
     "pattern": "\\bwere provided by\\b",
     "replacement": "provided",
     "reason": "Use active voice instead of passive voice."
+  },
+  {
+    "pattern": "\\blearning path\\b",
+    "replacement": "Learning Path",
+    "reason": "Capitalize 'Learning Path'."
   }
 ]

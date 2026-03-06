@@ -19,6 +19,11 @@ author: Florent Lebeau
 ### Tags
 skilllevels: Introductory
 subjects: ML
+cloud_service_providers:
+  - AWS
+  - Microsoft Azure
+  - Google Cloud
+  - Oracle
 armips:
     - Neoverse
     - Cortex-A
@@ -26,8 +31,7 @@ operatingsystems:
     - Linux
 tools_software_languages:
     - SVE
-    - Neon
-    - Coding
+    - NEON
     - armie
     - GCC
     - armclang
@@ -56,7 +60,7 @@ further_reading:
         type: documentation
     - resource:
         title: Optimizing HPCG for Arm SVE
-        link: https://community.arm.com/arm-community-blogs/b/high-performance-computing-blog/posts/optimizing-hpcg-for-arm-sve
+        link: https://developer.arm.com/community/arm-community-blogs/b/servers-and-cloud-computing-blog/posts/optimizing-hpcg-for-arm-sve
         type: blog
 
 

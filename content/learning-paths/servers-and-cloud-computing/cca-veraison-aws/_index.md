@@ -18,6 +18,8 @@ author: Paul Howard
 ### Tags
 skilllevels: Advanced
 subjects: Performance and Architecture
+cloud_service_providers:
+  - AWS
 armips:
     - Neoverse
     - Cortex-A
@@ -25,6 +27,7 @@ operatingsystems:
     - Linux
 tools_software_languages:
     - CCA
+    - RME
     - Runbook
 
 further_reading:

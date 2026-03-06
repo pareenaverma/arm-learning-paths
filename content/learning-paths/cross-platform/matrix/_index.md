@@ -28,11 +28,11 @@ armips:
     - Neoverse
     - Cortex-A
 tools_software_languages:
-    - C++
+    - CPP
     - GCC
     - Clang
     - CMake
-    - GoogleTest
+    - Google Test
     - Runbook
 
 operatingsystems:

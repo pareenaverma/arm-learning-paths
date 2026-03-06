@@ -7,7 +7,6 @@ import sys
 # Local import
 import report
 import parse
-import patch
 import check
 import filter_checker
 
@@ -22,6 +21,7 @@ level = { 10: "DEBUG",  20: "INFO",  30: "WARNING",  40: "ERROR" }
 Test Learning Path
 """
 def check_lp(lp_path, link, debug):
+    test_image_results = None # initialize the variable
     if not os.path.isdir(lp_path):
         lp_path = os.path.dirname(lp_path)
 
@@ -86,7 +86,6 @@ def main():
     arg_parser.add_argument('-l', '--link', metavar='URL', action='store', type=str, help='Specify URL to github actions report. Added when patching sources files with --instructions')
     arg_parser.add_argument('-p', '--patch', action='store_true', help='Patch categories _index.md with results when using --filter-checker')
     arg_parser.add_argument('-t', '--type', metavar='REPORT', action='store', default='all', type=str, help='Specify report type detailing the closed filter status when using --filter-checker. Can be either \'all\', \'subjects\', \'softwares\', \'oses\', \'tools\'')
-    arg_parser.add_argument('-sr', '--stats-report', action='store_true', help='Added when patching statistics file with --instructions')
 
     arg_group = arg_parser.add_mutually_exclusive_group()
     arg_group.add_argument('-f', '--filter-checker', action='store_true', help='Validates the correct closed schema filters are being used, reports any errors, and optionally updates _index.md files for each learning path category to reflect the currently supported filters.')
@@ -151,15 +150,18 @@ def main():
                     sys.exit(0)
         elif os.path.isdir(args.instructions) and "/learning-paths/" in os.path.abspath(args.instructions):
             results_dict = check_lp(args.instructions, args.link, args.debug)
+        elif "/migration" in os.path.abspath(args.instructions):
+                logging.info("Migration paths are not supported for maintenance tests yet.")
+                exit(0)
         else:
             logging.error("-i/--instructions expects a .md file, a CSV with a list of files or a Learning Path directory")
-        if args.stats_report:
-            # If all test results are zero, all tests have passed
-            patch.patch(args.instructions, results_dict, args.link)
-        if all(results_dict.get(k) for k in results_dict):
-            # Errors exist
-            logging.info("Tests failed in test suite")
-            sys.exit(1)
+        if results_dict is not None:
+            if all(results_dict.get(k) for k in results_dict):
+                # Errors exist
+                logging.info("Tests failed in test suite")
+                sys.exit(1)
+        else:
+            pass
     elif args.spelling:
         logging.info(f"Checking spelling of {args.spelling}")
         output = parse.spelling(args.spelling)

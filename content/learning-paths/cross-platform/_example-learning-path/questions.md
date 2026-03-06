@@ -1,16 +1,10 @@
 ---
 title: "Common questions"
 
-weight: 10 
+weight: 11
 
 layout: "learningpathall"
 ---
-
-### Why is the search box missing on the home page?
-
-The search index is not automatically generated, but you can add it to enable the search box. 
-
-Refer to the information about the search box in the [Learning Path setup](/learning-paths/cross-platform/_example-learning-path/setup/#search) section.
 
 ### Why are my Learning Path pages in the wrong order?
 
@@ -30,3 +24,4 @@ Modify the weight values to be unique and the extra buttons will disappear.
 ### Why aren't my changes showing up under Learning Paths? 
 
 There are various reasons this can happen. One being that the top links on the page will take you to the external site. Make sure that you are still viewing the Hugo server on `localhost`.
+

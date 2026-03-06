@@ -26,6 +26,9 @@ test_maintenance: true
 ### Tags
 skilllevels: Introductory
 subjects: ML
+cloud_service_providers:
+  - AWS
+  - Oracle
 armips:
 - Neoverse
 operatingsystems:
@@ -45,7 +48,7 @@ further_reading:
         type: documentation
     - resource:
         title: Machine Learning Inference on AWS Graviton3
-        link: https://community.arm.com/arm-community-blogs/b/infrastructure-solutions-blog/posts/machine-learning-inference-on-aws-graviton3
+        link: https://developer.arm.com/community/arm-community-blogs/b/servers-and-cloud-computing-blog/posts/machine-learning-inference-on-aws-graviton3
         type: blog
 
 
@@ -54,5 +57,4 @@ further_reading:
 weight: 1                       # _index.md always has weight of 1 to order correctly
 layout: "learningpathall"       # All files under learning paths have this same wrapper
 learning_path_main_page: "yes"  # This should be surfaced when looking for related content. Only set for _index.md of learning path content.
-layout: learningpathall
 ---

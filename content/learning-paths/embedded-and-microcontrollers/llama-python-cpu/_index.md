@@ -25,10 +25,10 @@ operatingsystems:
     - Linux
 tools_software_languages:
     - LLM
-    - GenAI
+    - Generative AI
     - Raspberry Pi
     - Python
-
+    - Hugging Face
 
 further_reading:
     - resource:

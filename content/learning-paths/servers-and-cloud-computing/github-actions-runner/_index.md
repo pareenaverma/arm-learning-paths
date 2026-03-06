@@ -10,7 +10,7 @@ learning_objectives:
     - Execute GitHub Actions workflows on Arm runners.
 
 prerequisites:
-    - An [Amazon Web Services account](https://learn.arm.com/learning-paths/servers-and-cloud-computing/csp/aws/).
+    - An [Amazon Web Services account](/learning-paths/servers-and-cloud-computing/csp/aws/).
     - A GitHub account (personal or organizational).
 
 author: Cyril Rohr
@@ -18,13 +18,14 @@ author: Cyril Rohr
 ##### Tags
 skilllevels: Introductory
 subjects: CI-CD
-cloud_service_providers: AWS
+cloud_service_providers:
+  - AWS
 
 armips:
     - Neoverse
 
 tools_software_languages:
-    - CloudFormation
+    - AWS Cloud Formation
     - GitHub
     - AWS EC2
 

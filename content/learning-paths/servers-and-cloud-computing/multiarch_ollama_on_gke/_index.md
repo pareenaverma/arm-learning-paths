@@ -24,7 +24,8 @@ author:
 skilllevels: Introductory
 
 subjects: Containers and Virtualization
-cloud_service_providers: Google Cloud
+cloud_service_providers:
+  - Google Cloud
     
 armips:
     - Neoverse
@@ -36,7 +37,7 @@ operatingsystems:
 tools_software_languages:
     - LLM
     - Ollama
-    - GenAI
+    - Generative AI
 
 further_reading:
   - resource:

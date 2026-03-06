@@ -6,19 +6,16 @@ weight: 4
 layout: learningpathall
 ---
 
-## Clone MNN repo
+## Clone Vision Language Models repo
 
 In this section, you will run the Qwen model in action using a demo application using a Android Package Kit (APK).
 
-A fork of the upstream MNN repository is set up to enable building the app as an Android Studio project. 
+This repository is set up to enable building the app as an Android Studio project. 
 
 Run the following commands to clone the repository and checkout the source tree:
 
 ```bash
-cd $HOME
-git clone https://github.com/HenryDen/MNN.git
-cd MNN
-git checkout origin/llm_android_demo
+git clone https://gitlab.arm.com/kleidi/kleidi-examples/vision-language-models
 ```
 
 ## Build the App Using Android Studio
@@ -31,7 +28,7 @@ Open Android Studio.
 
 Go to **File > Open**. 
 
-Navigate to the cloned MNN repository, expand the `transformers/llm/engine/` directories, select the `android` directory, and click `Open`.
+Navigate to the vision-language-models directories, and click `Open`.
 
 This triggers a build of the project, and you should see output similar to the following on completion:
 
@@ -47,7 +44,7 @@ The build will be executed, and then the app will be copied and installed on the
 
 After opening the app, you will see the splash screen:
 
-![Loading screenshot](Loading_page.png)
+![Loading screenshot](loading_page.png)
 
 Finally, you can use the UI to chat with the app. Try uploading an image and ask a question on it.
 

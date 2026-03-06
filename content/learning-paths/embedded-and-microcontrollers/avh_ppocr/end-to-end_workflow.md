@@ -14,7 +14,7 @@ This section provides hands-on instructions for you to deploy pre-trained Paddle
 
 The steps involved in the model deployment are shown in the figure below:
 
-![End-to-end workflow#center](./Figure3.png "Figure 3. End-to-end workflow")
+![End-to-end workflow#center](./figure3.webp "Figure 3. End-to-end workflow")
 
 ## Deploy PaddleOCR text recognition model on the Corstone-300 FVP included with Arm Virtual Hardware
 
@@ -22,7 +22,7 @@ Start by launching the [Arm Virtual Hardware AMI](/install-guides/avh/).
 
 Alternatively, you can also download the Corstone-300 FVP from the [Arm Ecosystem FVP](https://developer.arm.com/downloads/-/arm-ecosystem-fvps) page. For installation instructions see [Arm Ecosystem FVPs](/install-guides/fm_fvp/eco_fvp/).
 
-The code for this [project](https://github.com/ArmDeveloperEcosystem/Paddle-examples-for-AVH/tree/main/OCR-example), is available to download from [ArmDeveloperEcosystem](https://github.com/ArmDeveloperEcosystem/Paddle-examples-for-AVH) GitHub repository as well as [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR/tree/dygraph/deploy/avh)’s GitHub repository (under the dygraph branch).
+The code for this [project](https://github.com/ArmDeveloperEcosystem/Paddle-examples-for-AVH/tree/main/OCR-example), is available to download from [ArmDeveloperEcosystem](https://github.com/ArmDeveloperEcosystem/Paddle-examples-for-AVH) GitHub repository as well as [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR/tree/main/deploy/avh)'s GitHub repository.
 
 Start by cloning the code repository on your running AVH AMI instance:
 
@@ -80,7 +80,7 @@ Training the model usually takes a lot of time. In step 2, an already trained En
 
 By default, the script uses the image shown below (QBHOUSE) as an example to verify the inference results on the Corstone-300 FVP with Arm Cortex-M55.
 
-![QBHOUSE#center](./Figure4.png)
+![QBHOUSE#center](./figure4.png)
 
 Make the script executable with `chmod`.
 

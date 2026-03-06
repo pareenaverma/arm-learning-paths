@@ -17,7 +17,7 @@ Key features of AWS IoT Core include:
 
 2. **Rules Engine**: transforms and routes the data to other AWS services such as AWS Lambda, Amazon Kinesis, Amazon S3, and more for processing, storage, or analytics.
 
-3. **Device Shadow**: provides a persistent virtual version, or "shadow", of each device that includes the device’s latest state so that applications can read messages and interact with the device even when it is offline.
+3. **Device Shadow**: provides a persistent virtual version, or "shadow", of each device that includes the device's latest state so that applications can read messages and interact with the device even when it is offline.
 
 4. **Security and Identity Service**: offers mutual authentication and encryption at all points of connection, ensuring that data is never exchanged between devices and AWS IoT Core without a proven identity.
 
@@ -27,8 +27,8 @@ In this learning path, you create an application that emulates the weather stati
 
 ## Before you begin
 Before you start, ensure you have installed and prepared the following tools:
-1. Download and install Node.js for ARM64 [here](https://nodejs.org/dist/v21.7.3/node-v21.7.3-arm64.msi).
-2. Download and configure AWS CLI [here](https://aws.amazon.com/cli/).
+1. Download and install [Node.js for ARM64](https://nodejs.org/dist/v21.7.3/node-v21.7.3-arm64.msi).
+2. Download and configure the [AWS CLI](https://aws.amazon.com/cli/).
 
 ## Create the project
 You now create a Node.js project. Open the Command Prompt and type the following commands:

@@ -9,14 +9,14 @@ layout: learningpathall
 ## Attestation Verification Service for Pre-Silicon CCA Platforms
 [Linaro](https://www.linaro.org/) provides an attestation verifier service for pre-silicon CCA platforms, such as the Fixed Virtual Platform (FVP). This service is available publicly and is hosted on Linaro infrastructure. This verification service can be used to verify CCA attestation tokens that come from emulated Arm platforms, including the example token that you have been using in this exercise.
 
-Linaro’s verification service is implemented using components from the open source [Veraison](https://github.com/veraison) project.
+Linaro's verification service is implemented using components from the open source [Veraison](https://github.com/veraison) project.
 
 The URL for reaching this experimental verifier service is https://veraison.test.linaro.org:8443.
 
 To check that you can reach the Linaro attestation verifier service, run the following command:
 
 ```bash
-curl https://veraison.test.linaro.org:8443/.well-known/veraison/verification
+curl https://veraison.test.linaro.org:8443/.well-known/veraison/verification | jq
 ```
 
 This is a simple call to query the well-known characteristics of the verification service. If it succeeds, it will return a JSON response that looks something like this:
@@ -63,7 +63,7 @@ If you can reach the verification service, you are now ready to use it to evalua
 
 One of the properties that was returned in the previous step was the public key of the verification service. This key will be needed later to check the signature on the attestation results. All that is needed in this step is to copy the contents of the `ear-verification-key` field from the previous step and save it to a separate JSON file.
 
-The easiest way to do this is to use the `jq` utility. 
+The easiest way to do this is to use the `jq` utility.
 You can save the public key by repeating the curl command from the previous step and use `jq` to filter the response down to just the public key part. Save it into a file called `pkey.json`:
 
 ```bash

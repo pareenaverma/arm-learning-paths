@@ -19,22 +19,25 @@ author:
     - Nikhil Gupta
     - Pareena Verma
     - Nobel Chowdary Mandepudi
-    - Ravi Malhotra
-    - Konstantinos Margaritis
 
 ### Tags
 skilllevels: Introductory
 subjects: ML
+cloud_service_providers:
+  - AWS
+  - Microsoft Azure
+  - Google Cloud
+  - Oracle
 armips:
     - Neoverse
 operatingsystems:
     - Linux
 tools_software_languages:
     - LLM
-    - GenAI
+    - Generative AI
     - Python
     - PyTorch
-
+    - Hugging Face
 
 further_reading:
     - resource:

@@ -9,11 +9,11 @@ layout: "learningpathall"
 
 ### AWS Lambda
 
-You will now use the AWS Lambda console to retrieve the AWS Lambda endpoint for the static website. Before you begin make sure to prepare the `GetAverageTemperature` AWS Lambda function as explained in this [Learning Path](/learning-paths/laptops-and-desktops/win_aws_iot_lambda_dynamodb/). Then proceed as follows:
+You will now use the AWS Lambda console to retrieve the AWS Lambda endpoint for the static website. Before you begin make sure to prepare the `GetAverageTemperature` AWS Lambda function as explained in [Integrate AWS Lambda with DynamoDB for IoT applications running Windows on Arm](/learning-paths/laptops-and-desktops/win_aws_iot_lambda_dynamodb/). Then proceed as follows:
 1. Go to the AWS Lambda console, and click the `GetAverageTemperature` Lambda function.
 2. In the Lambda function dashboard, click the **Configuration** tab and then the **Function URL** as shown below:
 
-![fig2](figures/02.png)
+![fig2](figures/02.webp)
 
 3. Under the Function URL, click the **Create Function URL** button.
 4. In the window that appears select NONE, scroll down to Additional Settings, and check **Configure cross-origin resource sharing (CORS)**.
@@ -21,7 +21,7 @@ You will now use the AWS Lambda console to retrieve the AWS Lambda endpoint for 
 
 The function URL will appear as follows:
 
-![fig3](figures/03.png)
+![fig3](figures/03.webp)
 
 Copy the link, and use it to replace the YOUR_API_GATEWAY_ENDPOINT_URL placeholder in the **index.js** file as follows:
 

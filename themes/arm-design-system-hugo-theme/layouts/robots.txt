@@ -1,6 +1,28 @@
 User-agent: *
-Allow: /
-Disallow: /*?
+Disallow: /install-guides/atp/
+Disallow: /install-guides/asct/
 
+# Explicitly welcome AI crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+# Sitemap for page discovery
 Sitemap: https://learn.arm.com/sitemap.xml
-Image Sitemap: https://learn.arm.com/learn-image-sitemap.xml
