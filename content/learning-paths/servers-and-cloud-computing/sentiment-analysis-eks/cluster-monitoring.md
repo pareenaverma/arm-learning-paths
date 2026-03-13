@@ -13,7 +13,7 @@ layout: learningpathall
 * Grafana is a visualization and analytics tool. It integrates with data sources from Prometheus to create interactive dashboards to monitor and analyze Kubernetes metrics. 
 
 {{% notice Note %}}
-The terrafom script executed in the previous step automatically installs Prometheus and Grafana in the EKS cluster. However, if you wish to have more flexibility with the installable versions for both, follow the instructions below.
+The Terraform script executed in the previous step automatically installs Prometheus and Grafana in the EKS cluster. However, if you wish to have more flexibility with the installable versions for both, follow the instructions below.
 {{% /notice %}}
 
 ## Install Prometheus on your EKS cluster
@@ -24,7 +24,7 @@ Follow the [Helm documentation](https://helm.sh/docs/intro/install/) to install 
 
 Confirm Helm is installed by running the version command:
 
-```console
+```bash
 helm version
 ```
 
@@ -34,21 +34,21 @@ The output is similar to:
 version.BuildInfo{Version:"v3.16.3", GitCommit:"cfd07493f46efc9debd9cc1b02a0961186df7fdf", GitTreeState:"clean", GoVersion:"go1.22.7"}
 ```
 
-Create a namespace in your EKS cluster to host `prometheus` pods:
+Create a namespace in your EKS cluster to host Prometheus pods:
 
-```console
+```bash
 kubectl create namespace prometheus
 ```
 
-Add the following Helm repo for prometheus:
+Add the following Helm repo for Prometheus:
 
-```console
+```bash
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 ```
 
 Install Prometheus on the cluster with the following command:
 
-```console
+```bash
 helm install prometheus prometheus-community/prometheus \
   --namespace prometheus \
   --set alertmanager.persistentVolume.storageClass="gp2" \
@@ -57,7 +57,7 @@ helm install prometheus prometheus-community/prometheus \
 
 Check that all pods are up and running:
 
-```console
+```bash
 kubectl get pods -n prometheus
 ```
 
@@ -65,13 +65,13 @@ kubectl get pods -n prometheus
 
 Add the following Helm repo for Grafana:
 
-```console
+```bash
 helm repo add grafana https://grafana.github.io/helm-charts
 ```
 
 Use a text editor to create a `grafana.yaml` file with the following contents:
 
-```console
+```yaml
 datasources:
   datasources.yaml:
     apiVersion: 1
@@ -85,13 +85,13 @@ datasources:
 
 Create another namespace for Grafana pods:
 
-```console
+```bash
 kubectl create namespace grafana
 ```
 
 Install Grafana on the cluster with the following command:
 
-```console
+```bash
 helm install grafana grafana/grafana \
   --namespace grafana \
   --set persistence.storageClassName="gp2" \
@@ -103,7 +103,7 @@ helm install grafana grafana/grafana \
 
 Check all pods are up and running:
 
-```console
+```bash
 kubectl get pods -n grafana
 ```
 
