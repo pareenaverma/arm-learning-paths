@@ -7,6 +7,7 @@ layout: agenticall
 author: ""
 
 ### Target hardware
+subjects:                  # e.g. ML  or  Containers and Virtualization
 armips:
 operatingsystems:
 tools_software_languages:

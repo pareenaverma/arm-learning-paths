@@ -9,7 +9,7 @@ level: Introductory        # Introductory or Advanced
 author: ""
 
 ### Tags — same closed-list taxonomy as Learning Paths
-subjects:
+subjects:                  # e.g. ML  or  Performance and Architecture
 armips:
 operatingsystems:
 tools_software_languages:

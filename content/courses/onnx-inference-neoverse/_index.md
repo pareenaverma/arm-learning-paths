@@ -9,8 +9,7 @@ level: Introductory
 author: Pareena Verma
 
 ### Tags — same taxonomy as Learning Paths for cross-pillar filtering
-subjects:
-    - ML
+subjects: ML
 armips:
     - Neoverse
 operatingsystems:
