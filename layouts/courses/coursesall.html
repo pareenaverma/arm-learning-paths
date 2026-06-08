@@ -1,0 +1,68 @@
+{{/*
+Stub layout for the courses pillar — prototype only.
+Renders using the base theme chrome with raw page content.
+Replace with a dedicated courses layout when the theme is extended.
+*/}}
+
+{{ define "main" }}
+<main id="main" class="c-container is-responsive-width">
+  <div class="u-margin-top-m u-margin-bottom-xl">
+
+    {{/* Pillar badge */}}
+    <p style="font-size:0.8rem; text-transform:uppercase; letter-spacing:0.05em; opacity:0.6;">
+      Courses · Prototype
+    </p>
+
+    {{/* Page title */}}
+    <h1>{{ .Title }}</h1>
+
+    {{/* Front matter fields rendered as metadata */}}
+    {{ with .Params.description }}<p><em>{{ . }}</em></p>{{ end }}
+
+    {{ with .Params.minutes_to_complete }}
+      <p><strong>Time to complete:</strong> {{ . }} minutes</p>
+    {{ end }}
+
+    {{ with .Params.level }}
+      <p><strong>Level:</strong> {{ . }}</p>
+    {{ end }}
+
+    {{ with .Params.author }}
+      <p><strong>Author:</strong> {{ . }}</p>
+    {{ end }}
+
+    {{/* Module list from front matter */}}
+    {{ with .Params.modules }}
+      <h2>Modules</h2>
+      <ol>
+        {{ range . }}
+          <li>
+            <strong>Module {{ .module }}:</strong>
+            {{ if .file }}
+              <a href="{{ .file }}">{{ .title }}</a>
+            {{ else }}
+              {{ .title }}
+            {{ end }}
+          </li>
+        {{ end }}
+      </ol>
+    {{ end }}
+
+    {{/* Page body content */}}
+    <div class="u-margin-top-m">
+      {{ .Content }}
+    </div>
+
+    {{/* Child pages (sub-modules) */}}
+    {{ if .Pages }}
+      <h2>Course modules</h2>
+      <ol>
+        {{ range .Pages.ByWeight }}
+          <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+        {{ end }}
+      </ol>
+    {{ end }}
+
+  </div>
+</main>
+{{ end }}

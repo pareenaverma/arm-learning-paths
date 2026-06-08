@@ -1,0 +1,33 @@
+{{/*
+Stub list layout for the agentic-guidance pillar — prototype only.
+Renders the section index and links to all workflows.
+*/}}
+
+{{ define "main" }}
+<main id="main" class="c-container is-responsive-width">
+  <div class="u-margin-top-m u-margin-bottom-xl">
+
+    <p style="font-size:0.8rem; text-transform:uppercase; letter-spacing:0.05em; opacity:0.6;">
+      Agentic Guidance · Prototype
+    </p>
+
+    <h1>{{ .Title }}</h1>
+    {{ with .Params.description }}<p>{{ . }}</p>{{ end }}
+    {{ .Content }}
+
+    {{ if .Sections }}
+      <h2>All workflows</h2>
+      <ul>
+        {{ range .Sections.ByTitle }}
+          <li>
+            <a href="{{ .RelPermalink }}"><strong>{{ .Title }}</strong></a>
+            {{ with .Params.task_type }}<span style="font-size:0.8rem; opacity:0.7;"> [{{ . }}]</span>{{ end }}
+            {{ with .Params.description }} — {{ . }}{{ end }}
+          </li>
+        {{ end }}
+      </ul>
+    {{ end }}
+
+  </div>
+</main>
+{{ end }}

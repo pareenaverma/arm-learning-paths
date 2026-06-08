@@ -1,0 +1,34 @@
+# Triggered on pushes to the production branch that touch the agentic-guidance pillar.
+# Deploys to the production environment at learn.arm.com/agentic-guidance/.
+name: Build and Deploy Production — Agentic Guidance
+
+on:
+  push:
+    branches: [production]
+    paths:
+      - 'content/agentic-guidance/**'
+      - 'config-agentic-guidance.toml'
+      - 'archetypes/agentic-guidance/**'
+      - 'themes/**'
+  workflow_dispatch:
+
+jobs:
+  build_and_deploy_prod:
+    name: Build and Deploy Agentic Guidance Prod
+    uses: ./.github/workflows/deploy-pillar.yml
+    permissions:
+      id-token: write
+      contents: read
+    with:
+      target: prod
+      aws-region: us-east-1
+      deploy-role-arn: arn:aws:iam::084149021538:role/Proj-GHA-arm-agentic-guidance-prod
+      hugo-config: config-agentic-guidance.toml
+      pillar-path: agentic-guidance
+    secrets:
+      HUGO_LLM_API: ${{ secrets.HUGO_LLM_API }}
+      HUGO_RAG_API: ${{ secrets.HUGO_RAG_API }}
+      HUGO_AUDIO_API: ${{ secrets.HUGO_AUDIO_API }}
+      HUGO_PHI_ONNX_LLM_API: ${{ secrets.HUGO_PHI_ONNX_LLM_API }}
+      HUGO_DEV_PROG_SIGNIUP_FORM_MUNCHKIN_ID: ${{ secrets.HUGO_DEV_PROG_SIGNIUP_FORM_MUNCHKIN_ID }}
+      HUGO_FORM_ID_FOR_PROGRAM_SIGNUP: ${{ secrets.HUGO_FORM_ID_FOR_PROGRAM_SIGNUP }}

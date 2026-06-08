@@ -1,0 +1,35 @@
+# Triggered on pushes to main that touch the agentic-guidance pillar only.
+# Deploys to the dev environment at learn.arm.com/agentic-guidance/ (dev bucket).
+name: Build and Deploy Dev — Agentic Guidance
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'content/agentic-guidance/**'
+      - 'config-agentic-guidance.toml'
+      - 'archetypes/agentic-guidance/**'
+      - 'themes/**'
+  workflow_dispatch:
+
+jobs:
+  build_and_deploy_dev:
+    if: github.repository == 'ArmDeveloperEcosystem/arm-learning-paths'
+    name: Build and Deploy Agentic Guidance Dev
+    uses: ./.github/workflows/deploy-pillar.yml
+    permissions:
+      id-token: write
+      contents: read
+    with:
+      target: dev
+      aws-region: us-east-1
+      deploy-role-arn: arn:aws:iam::688080325088:role/Proj-GHA-arm-agentic-guidance-dev
+      hugo-config: config-agentic-guidance.toml
+      pillar-path: agentic-guidance
+    secrets:
+      HUGO_LLM_API: ${{ secrets.HUGO_LLM_API }}
+      HUGO_RAG_API: ${{ secrets.HUGO_RAG_API }}
+      HUGO_AUDIO_API: ${{ secrets.HUGO_AUDIO_API }}
+      HUGO_PHI_ONNX_LLM_API: ${{ secrets.HUGO_PHI_ONNX_LLM_API }}
+      HUGO_DEV_PROG_SIGNIUP_FORM_MUNCHKIN_ID: ${{ secrets.HUGO_DEV_PROG_SIGNIUP_FORM_MUNCHKIN_ID }}
+      HUGO_FORM_ID_FOR_PROGRAM_SIGNUP: ${{ secrets.HUGO_FORM_ID_FOR_PROGRAM_SIGNUP }}

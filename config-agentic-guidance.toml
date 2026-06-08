@@ -1,0 +1,53 @@
+title = 'Arm Agentic Guidance'
+
+# Path-scoped baseURL — in production this becomes https://learn.arm.com/agentic-guidance/
+baseURL = '/agentic-guidance/'
+languageCode = 'en-us'
+theme = "arm-design-system-hugo-theme"
+
+enableGitInfo = true
+enableRobotsTXT = false
+
+contentDir = "content/agentic-guidance"
+
+[deployment]
+[[deployment.targets]]
+name = "dev"
+URL = "s3://arm-learning-paths-dev/agentic-guidance?region=us-east-1"
+cloudFrontDistributionID = "EAMKPMDBM18II"
+include = "agentic-guidance/**"
+
+[[deployment.targets]]
+name = "prod"
+URL = "s3://arm-learning-paths-prod/agentic-guidance?region=us-east-1"
+cloudFrontDistributionID = "E2IA2AC83UE2VJ"
+include = "agentic-guidance/**"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+    [markup.goldmark.extensions]
+      [markup.goldmark.extensions.passthrough]
+        enable = true
+        [markup.goldmark.extensions.passthrough.delimiters]
+          block = [['\[', '\]'], ['$$', '$$']]
+          inline = [['\(', '\)']]
+
+[frontmatter]
+lastmod = ["lastmod", ":git", "date", "publishDate"]
+
+[taxonomies]
+subject = "subjects"
+operatingsystem = "operatingsystems"
+tool_software_language = "tools_software_languages"
+armip = "armips"
+# Agentic-guidance-specific taxonomy
+agent = "agent_compatible"
+
+[params]
+github_repo = "https://github.com/ArmDeveloperEcosystem/arm-agentic-guidance"
+github_project_repo = "https://github.com/ArmDeveloperEcosystem/arm-agentic-guidance"
+assetsDir = "assets"
+github_branch = "main"
+pillar = "agentic-guidance"

@@ -1,0 +1,55 @@
+{{/*
+Stub layout for the agentic-guidance pillar — prototype only.
+Renders using the base theme chrome with raw page content.
+Replace with a dedicated agenticall layout when the theme is extended.
+*/}}
+
+{{ define "main" }}
+<main id="main" class="c-container is-responsive-width">
+  <div class="u-margin-top-m u-margin-bottom-xl">
+
+    {{/* Pillar badge */}}
+    <p style="font-size:0.8rem; text-transform:uppercase; letter-spacing:0.05em; opacity:0.6;">
+      Agentic Guidance · Prototype
+    </p>
+
+    {{/* Page title */}}
+    <h1>{{ .Title }}</h1>
+
+    {{ with .Params.description }}<p><em>{{ . }}</em></p>{{ end }}
+
+    {{/* Agentic metadata */}}
+    {{ with .Params.task_type }}
+      <p><strong>Task type:</strong> {{ . }}</p>
+    {{ end }}
+
+    {{ with .Params.estimated_turns }}
+      <p><strong>Estimated agent turns:</strong> {{ . }}</p>
+    {{ end }}
+
+    {{ with .Params.agent_compatible }}
+      <p><strong>Compatible agents:</strong> {{ delimit . ", " }}</p>
+    {{ end }}
+
+    {{ with .Params.author }}
+      <p><strong>Author:</strong> {{ . }}</p>
+    {{ end }}
+
+    {{/* Page body content */}}
+    <div class="u-margin-top-m">
+      {{ .Content }}
+    </div>
+
+    {{/* Child pages (prompt, workflow, etc.) */}}
+    {{ if .Pages }}
+      <h2>Files in this workflow</h2>
+      <ul>
+        {{ range .Pages.ByWeight }}
+          <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+        {{ end }}
+      </ul>
+    {{ end }}
+
+  </div>
+</main>
+{{ end }}

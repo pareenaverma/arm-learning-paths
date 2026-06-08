@@ -1,0 +1,53 @@
+title = 'Arm Courses'
+
+# Path-scoped baseURL — in production this becomes https://learn.arm.com/courses/
+baseURL = '/courses/'
+languageCode = 'en-us'
+theme = "arm-design-system-hugo-theme"
+
+enableGitInfo = true
+enableRobotsTXT = false   # robots.txt owned by the root pillar
+
+contentDir = "content/courses"
+
+[deployment]
+[[deployment.targets]]
+name = "dev"
+URL = "s3://arm-learning-paths-dev/courses?region=us-east-1"
+cloudFrontDistributionID = "EAMKPMDBM18II"
+# Invalidate only the /courses/* path prefix
+include = "courses/**"
+
+[[deployment.targets]]
+name = "prod"
+URL = "s3://arm-learning-paths-prod/courses?region=us-east-1"
+cloudFrontDistributionID = "E2IA2AC83UE2VJ"
+include = "courses/**"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+    [markup.goldmark.extensions]
+      [markup.goldmark.extensions.passthrough]
+        enable = true
+        [markup.goldmark.extensions.passthrough.delimiters]
+          block = [['\[', '\]'], ['$$', '$$']]
+          inline = [['\(', '\)']]
+
+[frontmatter]
+lastmod = ["lastmod", ":git", "date", "publishDate"]
+
+[taxonomies]
+subject = "subjects"
+operatingsystem = "operatingsystems"
+skilllevel = "skilllevels"
+tool_software_language = "tools_software_languages"
+armip = "armips"
+
+[params]
+github_repo = "https://github.com/ArmDeveloperEcosystem/arm-courses"
+github_project_repo = "https://github.com/ArmDeveloperEcosystem/arm-courses"
+assetsDir = "assets"
+github_branch = "main"
+pillar = "courses"

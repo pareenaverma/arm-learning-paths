@@ -1,0 +1,103 @@
+name: Deploy Hugo Pillar to S3
+
+# Called by pillar-specific main.yml / production.yml via workflow_call.
+# Each pillar passes its own config file, S3 path prefix, and IAM role.
+
+on:
+  workflow_call:
+    inputs:
+      target:
+        description: "Hugo deployment target (dev or prod)"
+        required: true
+        type: string
+      aws-region:
+        description: "AWS region"
+        required: true
+        type: string
+      deploy-role-arn:
+        description: "AWS OIDC IAM role ARN"
+        required: true
+        type: string
+      hugo-config:
+        description: "Path to the pillar-specific Hugo config file, e.g. config-courses.toml"
+        required: true
+        type: string
+      pillar-path:
+        description: "S3 destination path prefix and public/ sub-directory, e.g. courses"
+        required: true
+        type: string
+    secrets:
+      HUGO_LLM_API:
+        required: false
+      HUGO_RAG_API:
+        required: false
+      HUGO_AUDIO_API:
+        required: false
+      HUGO_PHI_ONNX_LLM_API:
+        required: false
+      HUGO_DEV_PROG_SIGNIUP_FORM_MUNCHKIN_ID:
+        required: false
+      HUGO_FORM_ID_FOR_PROGRAM_SIGNUP:
+        required: false
+
+env:
+  HUGO_VERSION: 0.130.0
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-24.04-arm
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          # Sparse checkout: fetch only the pillar content dir, shared config, and theme.
+          # This is the key step that keeps CI fast and clone size small.
+          sparse-checkout: |
+            content/${{ inputs.pillar-path }}
+            ${{ inputs.hugo-config }}
+            themes/
+            assets/
+            archetypes/${{ inputs.pillar-path }}
+          sparse-checkout-cone-mode: false
+          fetch-depth: 0   # needed for enableGitInfo / lastmod
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: ${{ env.HUGO_VERSION }}
+          extended: true
+
+      - name: Install Post-CSS
+        run: npm install postcss-cli
+
+      - name: AWS Github OIDC Login
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ inputs.deploy-role-arn }}
+          aws-region: ${{ inputs.aws-region }}
+
+      # Build only this pillar using its scoped config file.
+      # --destination scopes the output to a sub-directory matching the S3 prefix.
+      - name: Build pillar
+        run: |
+          hugo --config ${{ inputs.hugo-config }} \
+               --minify \
+               --destination public/${{ inputs.pillar-path }}
+        env:
+          HUGO_LLM_API: ${{ secrets.HUGO_LLM_API }}
+          HUGO_RAG_API: ${{ secrets.HUGO_RAG_API }}
+          HUGO_AUDIO_API: ${{ secrets.HUGO_AUDIO_API }}
+          HUGO_PHI_ONNX_LLM_API: ${{ secrets.HUGO_PHI_ONNX_LLM_API }}
+          HUGO_DEV_PROG_SIGNIUP_FORM_MUNCHKIN_ID: ${{ secrets.HUGO_DEV_PROG_SIGNIUP_FORM_MUNCHKIN_ID }}
+          HUGO_FORM_ID_FOR_PROGRAM_SIGNUP: ${{ secrets.HUGO_FORM_ID_FOR_PROGRAM_SIGNUP }}
+
+      # Deploy only the pillar's S3 prefix and invalidate only that CloudFront path.
+      - name: Deploy to S3
+        run: |
+          hugo deploy \
+            --config ${{ inputs.hugo-config }} \
+            --target ${{ inputs.target }} \
+            --invalidateCDN \
+            --maxDeletes -1

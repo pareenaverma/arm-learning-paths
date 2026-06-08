@@ -1,0 +1,35 @@
+# Triggered on pushes to main that touch the courses pillar only.
+# Deploys to the dev environment at learn.arm.com/courses/ (dev bucket).
+name: Build and Deploy Dev — Courses
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'content/courses/**'
+      - 'config-courses.toml'
+      - 'archetypes/course/**'
+      - 'themes/**'
+  workflow_dispatch:
+
+jobs:
+  build_and_deploy_dev:
+    if: github.repository == 'ArmDeveloperEcosystem/arm-learning-paths'
+    name: Build and Deploy Courses Dev
+    uses: ./.github/workflows/deploy-pillar.yml
+    permissions:
+      id-token: write
+      contents: read
+    with:
+      target: dev
+      aws-region: us-east-1
+      deploy-role-arn: arn:aws:iam::688080325088:role/Proj-GHA-arm-courses-dev
+      hugo-config: config-courses.toml
+      pillar-path: courses
+    secrets:
+      HUGO_LLM_API: ${{ secrets.HUGO_LLM_API }}
+      HUGO_RAG_API: ${{ secrets.HUGO_RAG_API }}
+      HUGO_AUDIO_API: ${{ secrets.HUGO_AUDIO_API }}
+      HUGO_PHI_ONNX_LLM_API: ${{ secrets.HUGO_PHI_ONNX_LLM_API }}
+      HUGO_DEV_PROG_SIGNIUP_FORM_MUNCHKIN_ID: ${{ secrets.HUGO_DEV_PROG_SIGNIUP_FORM_MUNCHKIN_ID }}
+      HUGO_FORM_ID_FOR_PROGRAM_SIGNUP: ${{ secrets.HUGO_FORM_ID_FOR_PROGRAM_SIGNUP }}
